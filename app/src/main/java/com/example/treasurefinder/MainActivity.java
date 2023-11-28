@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         //Send to server here
         //Send hashed username, password, and salt used for hashing
 
-        String username = (String) txtUsername.getText();
-        String password = (String) txtPassword.getText();
+        String username = txtUsername.getText().toString();
+        String password = txtPassword.getText().toString();
 
         JSONObject j = new JSONObject();
         j.put("username", username);
