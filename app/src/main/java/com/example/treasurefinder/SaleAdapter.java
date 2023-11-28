@@ -50,4 +50,5 @@ public class SaleAdapter extends BaseAdapter {
 
         return view;
     }
+
 }

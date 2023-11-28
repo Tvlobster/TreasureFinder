@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -60,7 +62,17 @@ TextView txtRange;
         adapter = new SaleAdapter(this,sales);
 
 
+
+
         lstSales.setAdapter(adapter);
+        lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SalesActivity.this, SaleDetail.class);
+                startActivity(intent);
+            }
+        });
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -98,6 +110,7 @@ TextView txtRange;
     }
 
 
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
@@ -132,7 +145,8 @@ TextView txtRange;
             public void onInfoWindowClick(@NonNull Marker marker) {
                // Toast.makeText(SalesActivity.this, "Hello", Toast.LENGTH_LONG).show();
                 //Create a new intent to open up a page with the sale
-
+                Intent intent = new Intent(SalesActivity.this, SaleDetail.class);
+                startActivity(intent);
 
 
 
