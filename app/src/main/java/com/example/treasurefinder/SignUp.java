@@ -45,9 +45,9 @@ public class SignUp extends AppCompatActivity {
         //Send to server here
         //Send hashed username, password, and salt used for hashing
 
-        String username = (String) txtUsername.getText();
-        String password = (String) txtPassword.getText();
-        String confirmPassword = (String) txtPasswordConfirmation.getText();
+        String username = txtUsername.getText().toString();
+        String password = txtPassword.getText().toString();
+        String confirmPassword = txtPasswordConfirmation.getText().toString();
 
         if(confirmPassword.equals(password)) {
             JSONObject j = new JSONObject();
