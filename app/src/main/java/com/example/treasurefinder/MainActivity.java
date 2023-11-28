@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -45,16 +46,18 @@ public class MainActivity extends AppCompatActivity {
         String password = (String) txtPassword.getText();
 
         JSONObject j = new JSONObject();
-        j.put("Username", username);
-        j.put("Password", password);
+        j.put("username", username);
+        j.put("password", password);
 
         JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
             //Add code for response here, in theory server should respond with a t/f depending on if login worked
         }, error -> {
         });
+
+        queue.add(r);
     }
 
-    public void signUp() {
+    public void signUp(View v) {
         Intent i = new Intent(this, SignUp.class);
         startActivity(i);
     }
