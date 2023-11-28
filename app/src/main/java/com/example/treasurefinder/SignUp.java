@@ -3,6 +3,7 @@ package com.example.treasurefinder;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +24,7 @@ public class SignUp extends AppCompatActivity {
 
     RequestQueue queue;
 
-    String URL = "https://treasurefinderbackend.onrender.com/";
+    String URL = "https://treasurefinderbackend.onrender.com/users/register";
 
     Boolean login;
     String serverResponse;
@@ -40,7 +41,7 @@ public class SignUp extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
     }
 
-    public void createAccount() throws JSONException {
+    public void createAccount(View v) throws JSONException {
         //Send to server here
         //Send hashed username, password, and salt used for hashing
 
@@ -50,13 +51,15 @@ public class SignUp extends AppCompatActivity {
 
         if(confirmPassword.equals(password)) {
             JSONObject j = new JSONObject();
-            j.put("Username", username);
-            j.put("Password", password);
+            j.put("username", username);
+            j.put("password", password);
 
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
                 //Add code for response here, in theory server should respond with a t/f depending on if login worked
             }, error -> {
             });
+
+            queue.add(r);
         }
 
         else {
