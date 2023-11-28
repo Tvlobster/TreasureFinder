@@ -23,7 +23,7 @@ public class SignUp extends AppCompatActivity {
 
     RequestQueue queue;
 
-    String URL = "";
+    String URL = "https://treasurefinderbackend.onrender.com/";
 
     Boolean login;
     String serverResponse;
