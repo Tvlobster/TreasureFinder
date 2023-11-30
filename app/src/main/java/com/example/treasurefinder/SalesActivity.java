@@ -61,10 +61,10 @@ TextView txtRange;
 
         adapter = new SaleAdapter(this,sales);
 
-
-
-
         lstSales.setAdapter(adapter);
+
+        //query the DB for sales and add to data structure
+        //create a marker for each sale
         lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
