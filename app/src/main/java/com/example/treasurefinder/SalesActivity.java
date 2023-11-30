@@ -21,6 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,6 +32,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -40,10 +46,13 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
     ArrayList<garageSale> sales;
 
     SaleAdapter adapter;
+    RequestQueue queue;
 
 
 SeekBar seekRange;
 TextView txtRange;
+
+String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,9 @@ TextView txtRange;
         adapter = new SaleAdapter(this,sales);
 
         lstSales.setAdapter(adapter);
+
+        queue = Volley.newRequestQueue(this);
+
 
         //query the DB for sales and add to data structure
         //create a marker for each sale
@@ -117,6 +129,15 @@ TextView txtRange;
         map.setInfoWindowAdapter(new PersonInfoWindow());
         LatLng nyc = new LatLng(40.7443679675679, -73.98867886292477);
         map.moveCamera(CameraUpdateFactory.newLatLng(nyc));
+
+
+
+
+        //
+        JSONObject j = new JSONObject();
+        JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, url, j, response -> {
+
+        }, error -> {});
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
