@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     RequestQueue queue;
 
-    String URL = "";
+    String URL = "https://treasurefinderbackend.onrender.com/login";
 
     Boolean login;
     String serverResponse;
@@ -51,10 +51,17 @@ public class MainActivity extends AppCompatActivity {
 
         JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
             //Add code for response here, in theory server should respond with a t/f depending on if login worked
+            serverResponse = response.toString();
+            login = true;
         }, error -> {
         });
 
         queue.add(r);
+
+        if(login == true) {
+            Intent i = new Intent(this, SalesActivity.class);
+            i.putExtra("ID", serverResponse);
+        }
     }
 
     public void signUp(View v) {
