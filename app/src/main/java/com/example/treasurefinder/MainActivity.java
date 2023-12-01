@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
     }
 
-    public void login() throws JSONException {
+    public void login(View v) throws JSONException {
 
         //Send to server here
         //Send hashed username, password, and salt used for hashing
