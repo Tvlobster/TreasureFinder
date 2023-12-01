@@ -2,10 +2,12 @@ package com.example.treasurefinder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.LauncherActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
     RequestQueue queue;
 
     String URL = "https://treasurefinderbackend.onrender.com/login";
-
-    Boolean login;
     String serverResponse;
 
     @Override
@@ -50,18 +50,27 @@ public class MainActivity extends AppCompatActivity {
         j.put("password", password);
 
         JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
-            //Add code for response here, in theory server should respond with a t/f depending on if login worked
-            serverResponse = response.toString();
-            login = true;
+            //Add code for response here, in theory server should respond with an ID if login is valid
+            try {
+                serverResponse = response.get("id").toString();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (serverResponse.equals("ERROR")) {
+                Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
+            }
+
+            else {
+                Intent i = new Intent(this, SalesActivity.class);
+                i.putExtra("ID", serverResponse);
+                startActivity(i);
+            }
+
         }, error -> {
         });
 
         queue.add(r);
-
-        if(login == true) {
-            Intent i = new Intent(this, SalesActivity.class);
-            i.putExtra("ID", serverResponse);
-        }
     }
 
     public void signUp(View v) {

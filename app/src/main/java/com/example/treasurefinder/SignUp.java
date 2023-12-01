@@ -26,9 +26,6 @@ public class SignUp extends AppCompatActivity {
 
     String URL = "https://treasurefinderbackend.onrender.com/users/register";
 
-    Boolean login;
-    String serverResponse;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +52,8 @@ public class SignUp extends AppCompatActivity {
             j.put("password", password);
 
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
-                //Add code for response here, in theory server should respond with a t/f depending on if login worked
+                Toast.makeText(this, "ACCOUNT MADE!", Toast.LENGTH_SHORT).show();
+                finish();
             }, error -> {
             });
 
