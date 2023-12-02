@@ -135,7 +135,7 @@ TextView txtRange;
         map.moveCamera(CameraUpdateFactory.newLatLng(nyc));
 
         String url = "https://treasurefinderbackend.onrender.com/seller/allGarageSales";
-        queue = Volley.newRequestQueue(this);
+        queue = Volley.newRequestQueue(this.getApplicationContext());
 
         JSONObject j = new JSONObject();
 
