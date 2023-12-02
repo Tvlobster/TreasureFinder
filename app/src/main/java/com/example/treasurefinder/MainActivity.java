@@ -17,6 +17,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+
 public class MainActivity extends AppCompatActivity {
     TextView txtUsername;
     TextView txtPassword;
@@ -34,7 +37,14 @@ public class MainActivity extends AppCompatActivity {
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
 
-        queue = Volley.newRequestQueue(this);
+        //Allows the use of cookies
+        //This is for user authentication
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
+
+
+
+        queue = Volley.newRequestQueue(this.getApplicationContext());
     }
 
     public void login(View v) throws JSONException {
@@ -49,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         j.put("username", username);
         j.put("password", password);
 
-        JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
+        JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
             //Add code for response here, in theory server should respond with an ID if login is valid
             try {
                 serverResponse = response.get("id").toString();

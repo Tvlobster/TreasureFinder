@@ -33,6 +33,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 SeekBar seekRange;
 TextView txtRange;
 
-String url = "";
+//String url = "https://treasurefinderbackend.onrender.com/seller/allGarageSales";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,8 @@ String url = "";
         setContentView(R.layout.activity_sales);
         tgView = findViewById(R.id.tgView);
         lstSales = findViewById(R.id.lstSales);
+
+
 
 
 
@@ -72,7 +76,7 @@ String url = "";
 
         lstSales.setAdapter(adapter);
 
-        queue = Volley.newRequestQueue(this);
+
 
 
         //query the DB for sales and add to data structure
@@ -130,14 +134,20 @@ String url = "";
         LatLng nyc = new LatLng(40.7443679675679, -73.98867886292477);
         map.moveCamera(CameraUpdateFactory.newLatLng(nyc));
 
+        String url = "https://treasurefinderbackend.onrender.com/seller/allGarageSales";
+        queue = Volley.newRequestQueue(this.getApplicationContext());
 
-
-
-        //
         JSONObject j = new JSONObject();
-        JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, url, j, response -> {
 
-        }, error -> {});
+        JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, url, j, response -> {
+            String jsonResponse = response.toString(); // Convert the response to a string
+            Log.d("MyLog", response.toString());
+        }, error -> {
+            Log.d("MyLog", error.toString() +" ");
+            error.printStackTrace();
+        });
+
+        queue.add(r);
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
