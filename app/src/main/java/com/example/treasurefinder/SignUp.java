@@ -16,7 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SignUp extends AppCompatActivity {
-
+//testingCommit
     TextView txtUsername;
     TextView txtPassword;
 
