@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         j.put("username", username);
         j.put("password", password);
 
-        JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
+        JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
             //Add code for response here, in theory server should respond with an ID if login is valid
             try {
                 serverResponse = response.get("id").toString();
