@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20dp">
+
+    <TextView
+        android:id="@+id/txtSaleTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TITLE"
+        android:textSize="34sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtSaleHost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Hosted By:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/txtSaleTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtSaleTitle" />
+
+    <TextView
+        android:id="@+id/txtSaleHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Hours of Operation:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/txtSaleHost"
+        app:layout_constraintTop_toBottomOf="@+id/txtSaleHost" />
+
+    <TextView
+        android:id="@+id/txtSaleAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Address:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/txtSaleHours"
+        app:layout_constraintTop_toBottomOf="@+id/txtSaleHours" />
+</androidx.constraintlayout.widget.ConstraintLayout>
