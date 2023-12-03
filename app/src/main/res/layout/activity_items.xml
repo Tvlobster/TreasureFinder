@@ -6,23 +6,54 @@
     android:layout_height="match_parent"
     tools:context=".ItemsActivity">
 
+    <Button
+        android:id="@+id/btnItemsActivity4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="View Items"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnProfileActivity3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnSalesActivity3" />
+
+    <Button
+        android:id="@+id/btnProfileActivity3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="My Profile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnItemsActivity4" />
+
+    <Button
+        android:id="@+id/btnSalesActivity3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="View Sales"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnItemsActivity4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ListView
         android:id="@+id/lstItems"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="390dp"
+        android:layout_height="480dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHours"
-        app:layout_constraintVertical_bias="0.884" />
+        app:layout_constraintTop_toBottomOf="@+id/txtItemsHours" />
 
     <TextView
-        android:id="@+id/txtName"
+        android:id="@+id/txtItemsName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -33,41 +64,41 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtAddress"
+        android:id="@+id/txtItemsAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Address: "
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtName"
+        app:layout_constraintStart_toEndOf="@+id/txtItemsName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtNum"
+        android:id="@+id/txtIitemsNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0 Items"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/txtItemsTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.547"
-        app:layout_constraintStart_toEndOf="@+id/txtTitle"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
+        app:layout_constraintStart_toEndOf="@+id/txtItemsTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtItemsAddress" />
 
     <TextView
-        android:id="@+id/txtHours"
+        android:id="@+id/txtItemsHours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Mon-Fri 9am-3pm"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtTitle"
-        app:layout_constraintTop_toBottomOf="@+id/txtNum" />
+        app:layout_constraintStart_toEndOf="@+id/txtItemsTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtIitemsNum" />
 
     <TextView
-        android:id="@+id/txtTitle"
+        android:id="@+id/txtItemsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -75,5 +106,5 @@
         android:text="Title:"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtItemsName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

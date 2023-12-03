@@ -9,10 +9,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ItemsActivity extends AppCompatActivity {
-    TextView txtName;
-    TextView txtTitle;
-    TextView txtAddress;
-    TextView txtNum;
+    TextView txtItemsName;
+    TextView txtItemsTitle;
+    TextView txtItemsAddress;
+    TextView txtItemsNum;
     ListView lstItems;
     ItemAdapter adapter;
     ArrayList<Item> items;
@@ -24,10 +24,10 @@ public class ItemsActivity extends AppCompatActivity {
 
         items = new ArrayList<>();
 
-        txtAddress = findViewById(R.id.txtAddress);
-        txtName = findViewById(R.id.txtName);
-        txtNum = findViewById(R.id.txtNum);
-        txtTitle = findViewById(R.id.txtTitle);
+        txtItemsAddress = findViewById(R.id.txtItemsAddress);
+        txtItemsName = findViewById(R.id.txtItemsName);
+        txtItemsNum = findViewById(R.id.txtIitemsNum);
+        txtItemsTitle = findViewById(R.id.txtItemsTitle);
         lstItems = findViewById(R.id.lstItems);
 
         items.add(new Item("Lamp", 25, "Needs new bulb"));
