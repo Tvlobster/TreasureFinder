@@ -2,7 +2,6 @@ package com.example.treasurefinder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.LauncherActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,12 +17,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
+
+    //TextView for username
     TextView txtUsername;
+
+    //TextView for password
     TextView txtPassword;
 
+    //Queue for sending JSON requests
     RequestQueue queue;
 
+    //URL for login
     String URL = "https://treasurefinderbackend.onrender.com/login";
+
+    //serverResponse for storing response from server for login
     String serverResponse;
 
     @Override
@@ -31,49 +38,61 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //sets username and password textviews to their respective views
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
 
+        //Instantiates queue
         queue = Volley.newRequestQueue(this);
     }
 
     public void login(View v) throws JSONException {
 
-        //Send to server here
-        //Send hashed username, password, and salt used for hashing
-
+        //Creates strings for username and password from the text in their respective text views
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
 
+        //Create new JSON object
         JSONObject j = new JSONObject();
+
+        //Add username and password to the object
         j.put("username", username);
         j.put("password", password);
 
+        //Creates a new JSON request to send the username and password over to the server for login
         JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
-            //Add code for response here, in theory server should respond with an ID if login is valid
             try {
+                //Try to set serverResponse to string held under id tag in server response
                 serverResponse = response.get("id").toString();
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
 
+            //If server response read ERROR
             if (serverResponse.equals("ERROR")) {
+                //Show toast stating login info was wrong
                 Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
             }
 
+            //If not
             else {
+                //Create new intent for SalesActivity, put serverResponse in intent, launch intent
                 Intent i = new Intent(this, SalesActivity.class);
                 i.putExtra("ID", serverResponse);
                 startActivity(i);
             }
 
         }, error -> {
+            //If theres a JSON error, show toast stating server error
+            Toast.makeText(this, "ERROR: SERVER ERROR", Toast.LENGTH_SHORT).show();
         });
 
+        //Add JSON request to queue
         queue.add(r);
     }
 
     public void signUp(View v) {
+        //Create and launch intent for sign up
         Intent i = new Intent(this, SignUp.class);
         startActivity(i);
     }
