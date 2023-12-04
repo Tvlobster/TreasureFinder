@@ -31,12 +31,20 @@ import java.net.CookieManager;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    //TextView for username
     TextView txtUsername;
+
+    //TextView for password
     TextView txtPassword;
 
+    //Queue for sending JSON requests
     RequestQueue queue;
 
+    //URL for login
     String URL = "https://treasurefinderbackend.onrender.com/login";
+
+    //serverResponse for storing response from server for login
     String serverResponse;
 
     @Override
@@ -44,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //sets username and password textviews to their respective views
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
 
@@ -52,48 +61,65 @@ public class MainActivity extends AppCompatActivity {
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
 
-
-
+        //Instantiates Queue
         queue = Volley.newRequestQueue(this.getApplicationContext());
     }
 
     public void login(View v) throws JSONException {
 
-        //Send to server here
-        //Send hashed username, password, and salt used for hashing
+        //Check to see if text views are left empty
+        if (txtUsername.getText().equals("") || txtPassword.getText().equals("")) {
+            //Show toast stating enter username and password
+            Toast.makeText(this, "ERROR: PLEASE ENTER USERNAME AND PASSWORD", Toast.LENGTH_SHORT).show();
+        }
 
-        String username = txtUsername.getText().toString();
-        String password = txtPassword.getText().toString();
+        else {
+            //sets username and password text views to their respective views
+            String username = txtUsername.getText().toString();
+            String password = txtPassword.getText().toString();
 
-        JSONObject j = new JSONObject();
-        j.put("username", username);
-        j.put("password", password);
+            //Create new JSON object
+            JSONObject j = new JSONObject();
 
-        JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
-            //Add code for response here, in theory server should respond with an ID if login is valid
-            try {
-                serverResponse = response.get("id").toString();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            //Add username and password to the object
+            j.put("username", username);
+            j.put("password", password);
 
-            if (serverResponse.equals("ERROR")) {
-                Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
-            }
+            //Creates a new JSON request to send the username and password over to the server for login
+            JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
+                try {
+                    //Try to set serverResponse to string held under id tag in server response
+                    serverResponse = response.get("id").toString();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
 
-            else {
-                Intent i = new Intent(this, SalesActivity.class);
-                i.putExtra("ID", serverResponse);
-                startActivity(i);
-            }
+                //If server response read ERROR
+                if (serverResponse.equals("ERROR")) {
+                    //Show toast stating login info was wrong
+                    Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
+                }
 
-        }, error -> {
-        });
+                //If not
+                else {
+                    //Create new intent for SalesActivity, put serverResponse in intent, launch intent
+                    Intent i = new Intent(this, SalesActivity.class);
+                    i.putExtra("ID", serverResponse);
+                    startActivity(i);
+                }
 
-        queue.add(r);
+            }, error -> {
+                //If theres a JSON error, show toast stating server error
+                Toast.makeText(this, "ERROR: SERVER ERROR", Toast.LENGTH_SHORT).show();
+            });
+
+            //Add JSON request to queue
+            queue.add(r);
+        }
     }
 
     public void signUp(View v) {
+        //Create and launch intent for sign up
         Intent i = new Intent(this, SignUp.class);
         startActivity(i);
     }

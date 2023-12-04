@@ -3,28 +3,35 @@ package com.example.treasurefinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 
 import android.app.Activity;
+
+import android.Manifest;
+
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
+
 import android.location.Address;
 import android.location.Geocoder;
+
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.AdapterView;
+
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -41,10 +48,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import java.io.IOException;
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class SalesActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -58,6 +68,15 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
     RequestQueue queue;
     Button btnSalesActivity, btnItemsActivity, btnProfileActivity;
 
+    public static final String TAG = "NotifServiceTag";
+
+    public static final int NOTIFICATION_REQUEST_CODE = 1;
+
+
+SeekBar seekRange;
+TextView txtRange;
+
+String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +147,13 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                 }
             }
         });
+
+
+        checkPermissions();
+        Intent i = new Intent(this, NotificationService.class);
+        startForegroundService(i);
+    }
+
 
     }
 
@@ -204,6 +230,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             return v;
         }
     }
+
 
     //this method makes a request to the server to get garage sale information and creates an array of the information
     public void requestInfo(){
@@ -298,6 +325,15 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                 Log.d("TEST", "This is not a valid location, cannot place marker");
             }
 
+        }
+
+
+    public void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Permissions NOT granted, requesting....");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
+        } else {
+            Log.d(TAG, "Permissions already granted");
         }
 
     }
