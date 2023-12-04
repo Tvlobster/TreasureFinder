@@ -33,6 +33,8 @@ public class NotificationService extends Service {
 
     public static final String TAG = "NotifServiceTag";
 
+    DismissReceiver receiver;
+
     private Socket mSocket;
     {
         try {
@@ -43,6 +45,7 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mSocket.on("newGarageSale", fn ->{
+            Log.d(TAG, "New Garage Sale from server");
             Notification notification = new NotificationCompat.Builder(NotificationService.this,CHANNEL_ID)
                     .setSmallIcon(android.R.drawable.star_big_on)
                     .setContentTitle("New garage sale near you!")
@@ -113,7 +116,7 @@ public class NotificationService extends Service {
         );
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
-        Log.d(TAG, "Main CHannel created");
+        Log.d(TAG, "Main Channel created");
     }
 
     class DismissReceiver extends BroadcastReceiver {
