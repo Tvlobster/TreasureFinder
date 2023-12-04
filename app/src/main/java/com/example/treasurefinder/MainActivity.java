@@ -61,56 +61,61 @@ public class MainActivity extends AppCompatActivity {
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
 
-
-
+        //Instantiates Queue
         queue = Volley.newRequestQueue(this.getApplicationContext());
     }
 
     public void login(View v) throws JSONException {
 
-        //Send to server here
-        //Send hashed username, password, and salt used for hashing
+        //Check to see if text views are left empty
+        if (txtUsername.getText().equals("") || txtPassword.getText().equals("")) {
+            //Show toast stating enter username and password
+            Toast.makeText(this, "ERROR: PLEASE ENTER USERNAME AND PASSWORD", Toast.LENGTH_SHORT).show();
+        }
 
-        String username = txtUsername.getText().toString();
-        String password = txtPassword.getText().toString();
+        else {
+            //sets username and password text views to their respective views
+            String username = txtUsername.getText().toString();
+            String password = txtPassword.getText().toString();
 
-        //Create new JSON object
-        JSONObject j = new JSONObject();
+            //Create new JSON object
+            JSONObject j = new JSONObject();
 
-        //Add username and password to the object
-        j.put("username", username);
-        j.put("password", password);
+            //Add username and password to the object
+            j.put("username", username);
+            j.put("password", password);
 
-        //Creates a new JSON request to send the username and password over to the server for login
-        JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
-            try {
-                //Try to set serverResponse to string held under id tag in server response
-                serverResponse = response.get("id").toString();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            //Creates a new JSON request to send the username and password over to the server for login
+            JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
+                try {
+                    //Try to set serverResponse to string held under id tag in server response
+                    serverResponse = response.get("id").toString();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
 
-            //If server response read ERROR
-            if (serverResponse.equals("ERROR")) {
-                //Show toast stating login info was wrong
-                Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
-            }
+                //If server response read ERROR
+                if (serverResponse.equals("ERROR")) {
+                    //Show toast stating login info was wrong
+                    Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
+                }
 
-            //If not
-            else {
-                //Create new intent for SalesActivity, put serverResponse in intent, launch intent
-                Intent i = new Intent(this, SalesActivity.class);
-                i.putExtra("ID", serverResponse);
-                startActivity(i);
-            }
+                //If not
+                else {
+                    //Create new intent for SalesActivity, put serverResponse in intent, launch intent
+                    Intent i = new Intent(this, SalesActivity.class);
+                    i.putExtra("ID", serverResponse);
+                    startActivity(i);
+                }
 
-        }, error -> {
-            //If theres a JSON error, show toast stating server error
-            Toast.makeText(this, "ERROR: SERVER ERROR", Toast.LENGTH_SHORT).show();
-        });
+            }, error -> {
+                //If theres a JSON error, show toast stating server error
+                Toast.makeText(this, "ERROR: SERVER ERROR", Toast.LENGTH_SHORT).show();
+            });
 
-        //Add JSON request to queue
-        queue.add(r);
+            //Add JSON request to queue
+            queue.add(r);
+        }
     }
 
     public void signUp(View v) {
