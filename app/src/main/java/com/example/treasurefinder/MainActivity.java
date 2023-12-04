@@ -2,6 +2,7 @@ package com.example.treasurefinder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.LauncherActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,19 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
+
+
+//for logging out we are going to need a method that contains this code
+
+//if (cookieManager.getCookieStore().getCookies().size() > 0) {
+//    cookieManager.getCookieStore().removeAll();
+//}
+
+
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,13 +56,21 @@ public class MainActivity extends AppCompatActivity {
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
 
-        //Instantiates queue
-        queue = Volley.newRequestQueue(this);
+        //Allows the use of cookies
+        //This is for user authentication
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
+
+
+
+        queue = Volley.newRequestQueue(this.getApplicationContext());
     }
 
     public void login(View v) throws JSONException {
 
-        //Creates strings for username and password from the text in their respective text views
+        //Send to server here
+        //Send hashed username, password, and salt used for hashing
+
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
 
