@@ -44,9 +44,9 @@ public class SaleAdapter extends BaseAdapter {
         TextView txtSaleTitle = view.findViewById(R.id.txtSaleTitle);
 
         txtSaleAddress.setText("Address: "+sale.address);
-        txtSaleHost.setText("Hosted By: "+sale.host);
+       // txtSaleHost.setText("Hosted By: "+sale.host);
         txtSaleTitle.setText(sale.title +"");
-        txtSaleHours.setText ("Open: " + sale.hours);
+        txtSaleHours.setText ("Open: " + sale.date + " from " + sale.hours);
 
         return view;
     }
