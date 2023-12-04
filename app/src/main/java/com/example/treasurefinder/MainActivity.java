@@ -20,6 +20,16 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 
+
+//for logging out we are going to need a method that contains this code
+
+//if (cookieManager.getCookieStore().getCookies().size() > 0) {
+//    cookieManager.getCookieStore().removeAll();
+//}
+
+
+
+
 public class MainActivity extends AppCompatActivity {
     TextView txtUsername;
     TextView txtPassword;
