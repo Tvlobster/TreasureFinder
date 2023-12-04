@@ -36,7 +36,7 @@ public class NotificationService extends Service {
     private Socket mSocket;
     {
         try {
-            mSocket = IO.socket("https://treasurefinderbackend.onrender.com:4000");
+            mSocket = IO.socket("https://treasurefinderbackend.onrender.com");
         } catch (URISyntaxException e) {}
     }
 
@@ -102,6 +102,7 @@ public class NotificationService extends Service {
         DismissReceiver receiver = new DismissReceiver();
         IntentFilter filter = new IntentFilter("dismiss_broadcast");
         registerReceiver(receiver,filter);
+        mSocket.connect();
     }
 
     public void createNotificationChannel() {
