@@ -1,6 +1,5 @@
 package com.example.treasurefinder;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,20 +9,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
-
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
 import java.net.URISyntaxException;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 public class NotificationService extends Service {
 
@@ -44,6 +38,12 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // Create a notification for running in the foreground
+        Notification foregroundNotification = createForegroundNotification();
+
+        // Start the service in the foreground and show the notification
+        startForeground(NOTIFICATION_ID, foregroundNotification);
+
         mSocket.on("newGarageSale", fn ->{
             Log.d(TAG, "New Garage Sale from server");
             Notification notification = new NotificationCompat.Builder(NotificationService.this,CHANNEL_ID)
@@ -129,5 +129,19 @@ public class NotificationService extends Service {
                     break;
             }
         }
+    }
+
+    private Notification createForegroundNotification() {
+        // Create a notification channel if necessary
+        createNotificationChannel();
+
+        // Create the notification
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("Service Running")
+                .setContentText("Listening for garage sale updates...")
+                .setSmallIcon(android.R.drawable.star_big_on)
+                .build();
+
+        return notification;
     }
 }
