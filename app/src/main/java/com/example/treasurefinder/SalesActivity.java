@@ -14,10 +14,12 @@ import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Intent;
 
+import android.content.res.ColorStateList;
 import android.location.Address;
 import android.location.Geocoder;
 
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +45,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +71,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
     SaleAdapter adapter;
     RequestQueue queue;
     Button btnSalesActivity, btnItemsActivity, btnProfileActivity;
+    public static final int LOCATION_REQUEST_CODE = 111;
 
     public static final String TAG = "NotifServiceTag";
 
@@ -87,6 +92,9 @@ String url = "";
         btnItemsActivity = findViewById(R.id.btnItemsActivity);
         btnSalesActivity = findViewById(R.id.btnSalesActivity);
         btnProfileActivity = findViewById(R.id.btnProfileActivity);
+
+
+
         //instantiate a new arrayList of garage sales
         sales = new ArrayList<>();
 
@@ -94,15 +102,15 @@ String url = "";
         btnItemsActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent itemsIntent = new Intent();
-                //startActivity();
+                Intent itemsIntent = new Intent(SalesActivity.this, ItemsActivity.class);
+                startActivity(itemsIntent);
             }
         });
         btnProfileActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profileIntent = new Intent();
-                //startActivity();
+                Intent profileIntent = new Intent(SalesActivity.this, UserSales.class);
+                startActivity(profileIntent);
             }
         });
 
@@ -152,7 +160,6 @@ String url = "";
         checkPermissions();
         Intent i = new Intent(this, NotificationService.class);
         startForegroundService(i);
-    }
 
 
     }
@@ -198,9 +205,6 @@ String url = "";
                 bundle.putStringArray("items", sale.items);
                 bundle.putString("date", sale.date);
 
-
-
-
                 intent.putExtra("saleObject", bundle);
                 startActivity(intent);
 
@@ -230,6 +234,7 @@ String url = "";
             return v;
         }
     }
+
 
 
     //this method makes a request to the server to get garage sale information and creates an array of the information
@@ -299,9 +304,9 @@ String url = "";
     }
 
     //this method adds markers on the map for each sale location in the sales array
-    public void addMarkers(){
+    public void addMarkers() {
         //iterate through each sale object in the array
-        for(int i=0;i<sales.size();i++){
+        for (int i = 0; i < sales.size(); i++) {
             //create a geocoder to geocode the address to laditiude and longitude values
             Geocoder geocoder = new Geocoder(this);
             //try to convert if the address is valid
@@ -318,25 +323,28 @@ String url = "";
                 Marker m = map.addMarker(new MarkerOptions().position(area));
                 //populate marker with info
                 m.setTitle(sales.get(i).title + "");
-                m.setSnippet(sales.get(i).address+"");
+                m.setSnippet(sales.get(i).address + "");
                 m.setTag(sales.get(i));
-            }
-            catch(Exception ex){
+            } catch (Exception ex) {
                 Log.d("TEST", "This is not a valid location, cannot place marker");
             }
 
         }
+    }
 
 
-    public void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Permissions NOT granted, requesting....");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
-        } else {
-            Log.d(TAG, "Permissions already granted");
+        public void checkPermissions () {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "Permissions NOT granted, requesting....");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
+            } else {
+                Log.d(TAG, "Permissions already granted");
+            }
+
         }
 
-    }
+
+
 
 }
 
