@@ -1,28 +1,34 @@
 package com.example.treasurefinder;
 
+import java.util.Arrays;
+
 public class garageSale {
     String title;
-    String host;
+    String date;
+
     String address;
     String hours;
-    int TUID;
+    String TUID;
+    String[] items;
 
-    public garageSale(String title, String host, String address, String hours, int TUID) {
+    public garageSale(String title, String address, String date, String hours, String TUID, String[] items) {
         this.title = title;
-        this.host = host;
         this.address = address;
+        this.date = date;
         this.hours = hours;
         this.TUID = TUID;
+        this.items = items;
     }
 
     @Override
     public String toString() {
         return "garageSale{" +
                 "title='" + title + '\'' +
-                ", host='" + host + '\'' +
+                ", date='" + date + '\'' +
                 ", address='" + address + '\'' +
                 ", hours='" + hours + '\'' +
-                ", TUID=" + TUID +
+                ", TUID='" + TUID + '\'' +
+                ", items=" + Arrays.toString(items) +
                 '}';
     }
 }

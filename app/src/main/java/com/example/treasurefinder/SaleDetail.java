@@ -19,6 +19,7 @@ import com.example.treasurefinder.databinding.ActivitySaleDetailBinding;
 
 public class SaleDetail extends AppCompatActivity {
 
+
     private AppBarConfiguration appBarConfiguration;
     private ActivitySaleDetailBinding binding;
 
@@ -35,6 +36,8 @@ public class SaleDetail extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         getSupportActionBar().setTitle("Garage Sale Details");
+
+
 
 
         //listener for X button
