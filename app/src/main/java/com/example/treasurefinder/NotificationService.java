@@ -27,8 +27,6 @@ public class NotificationService extends Service {
 
     public static final String TAG = "NotifServiceTag";
 
-    DismissReceiver receiver;
-
     private Socket mSocket;
     {
         try {
@@ -38,6 +36,7 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         // Create a notification for running in the foreground
         Notification foregroundNotification = createForegroundNotification();
 
