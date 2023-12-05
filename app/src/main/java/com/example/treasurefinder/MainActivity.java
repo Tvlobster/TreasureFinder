@@ -90,24 +90,24 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     //Try to set serverResponse to string held under id tag in server response
                     serverResponse = response.get("id").toString();
+
+                    //If server response read ERROR
+                    if (serverResponse.equals("ERROR")) {
+                        //Show toast stating login info was wrong
+                        Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
+                    }
+
+                    //If not
+                    else {
+                        //Create new intent for SalesActivity, put serverResponse in intent, launch intent
+                        Intent i = new Intent(this, SalesActivity.class);
+                        i.putExtra("ID", serverResponse);
+                        startActivity(i);
+                    }
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-
-                //If server response read ERROR
-                if (serverResponse.equals("ERROR")) {
-                    //Show toast stating login info was wrong
-                    Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
-                }
-
-                //If not
-                else {
-                    //Create new intent for SalesActivity, put serverResponse in intent, launch intent
-                    Intent i = new Intent(this, SalesActivity.class);
-                    i.putExtra("ID", serverResponse);
-                    startActivity(i);
-                }
-
             }, error -> {
                 //If theres a JSON error, show toast stating server error
                 Toast.makeText(this, "ERROR: SERVER ERROR", Toast.LENGTH_SHORT).show();
