@@ -33,11 +33,15 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -47,6 +51,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,10 +83,10 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
     public static final int NOTIFICATION_REQUEST_CODE = 1;
 
 
-SeekBar seekRange;
-TextView txtRange;
+    SeekBar seekRange;
+    TextView txtRange;
 
-String url = "";
+    String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +99,7 @@ String url = "";
         btnProfileActivity = findViewById(R.id.btnProfileActivity);
 
         Intent loginIntent = getIntent();
-       String userID =  loginIntent.getStringExtra("ID");
-
-       //
-
+        String userID = loginIntent.getStringExtra("ID");
 
 
         //instantiate a new arrayList of garage sales
@@ -140,7 +142,7 @@ String url = "";
         tgView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(buttonView.isChecked()){
+                if (buttonView.isChecked()) {
                     //hide the map and make the list view of sales appear
                     FragmentManager fm = getFragmentManager();
                     getSupportFragmentManager().beginTransaction()
@@ -150,8 +152,7 @@ String url = "";
                     //bring list into view
                     lstSales.setVisibility(View.VISIBLE);
 
-                }
-                else{
+                } else {
                     //hide the list view and allow the map view to appear
                     FragmentManager fm = getFragmentManager();
                     getSupportFragmentManager().beginTransaction()
@@ -169,10 +170,42 @@ String url = "";
         startForegroundService(i);
 
 
+        lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 'position' parameter gives you the index of the item clicked
+                // Perform actions based on the clicked item, for example:
+
+                // Get the clicked item from the adapter
+                garageSale clickedItem = (garageSale) parent.getItemAtPosition(position);
+
+                // Handle the click, such as displaying a toast with the clicked item text
+                if (clickedItem != null) {
+                    String text = clickedItem.toString();
+                    Log.d("TAG", "Clicked: " + text);
+
+
+                    //Create a new intent to open up a page with the sale details
+                    Intent intent = new Intent(SalesActivity.this, SaleDetail.class);
+                    intent.putExtra("title", clickedItem.title);
+                    intent.putExtra("address", clickedItem.address);
+                    intent.putExtra("owner", clickedItem.owner);
+                    intent.putExtra("hours", clickedItem.hours);
+                    intent.putExtra("TUID", clickedItem.TUID);
+                    intent.putExtra("items", clickedItem.items);
+                    intent.putExtra("date", clickedItem.date);
+
+                    startActivity(intent);
+
+                }
+            }
+        });
+
+
     }
 
 
-//all logic to establish the map and markers and server request
+    //all logic to establish the map and markers and server request
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
@@ -231,20 +264,19 @@ String url = "";
         @Nullable
         @Override
         public View getInfoWindow(@NonNull Marker marker) {
-            View v = LayoutInflater.from(SalesActivity.this).inflate(R.layout.layout_customwindow,null);
+            View v = LayoutInflater.from(SalesActivity.this).inflate(R.layout.layout_customwindow, null);
             TextView txtTitle = v.findViewById(R.id.txtTitle);
             TextView txtAddress = v.findViewById(R.id.txtAddress);
             garageSale sale = (garageSale) marker.getTag();
-            txtTitle.setText(sale.title+"");
-           txtAddress.setText(sale.address+"");
+            txtTitle.setText(sale.title + "");
+            txtAddress.setText(sale.address + "");
             return v;
         }
     }
 
 
-
     //this method makes a request to the server to get garage sale information and creates an array of the information
-    public void requestInfo(){
+    public void requestInfo() {
         //url to the server
         String url = "https://treasurefinderbackend.onrender.com/seller/allGarageSales";
         //create a new request queue
@@ -256,13 +288,13 @@ String url = "";
         JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, url, j, response -> {
             String jsonResponse = response.toString(); // Convert the response to a string
             Log.d("MyLog", response.toString());
-            try{
+            try {
                 //extract the object and array from the response
                 JSONObject myObject = new JSONObject(jsonResponse);
                 JSONArray listOfGarageSales = myObject.getJSONArray("listOfGarageSales");
                 //extract information from each sale object in the array and create a new sale object
-                for(int i = 0;i<listOfGarageSales.length();i++) {
-                   // testing  JSONObject firstGarageSale = listOfGarageSales.getJSONObject(0);
+                for (int i = 0; i < listOfGarageSales.length(); i++) {
+                    // testing  JSONObject firstGarageSale = listOfGarageSales.getJSONObject(0);
                     JSONObject garageSale = listOfGarageSales.getJSONObject(i);
                     String title = garageSale.getString("title");
                     String date = garageSale.getString("date");
@@ -287,7 +319,7 @@ String url = "";
                     String hours = startTime + " - " + endTime;
 
                     //create a new garage sale object for the array
-                    garageSale newSale = new garageSale(title, address,username, date, hours, TUID, items);
+                    garageSale newSale = new garageSale(title, address, username, date, hours, TUID, items);
                     //push new object to array
                     sales.add(newSale);
                     Log.d("MYTAG", newSale.toString());
@@ -307,11 +339,13 @@ String url = "";
             }
 
         }, error -> {
-            Log.d("MyLog", error.toString() +" ");
+            Log.d("MyLog", error.toString() + " ");
             error.printStackTrace();
         });
         //add the request to the queue
         queue.add(r);
+
+        getCurrentLocation();
 
     }
 
@@ -330,7 +364,6 @@ String url = "";
                 double longitude = firstAddress.getLongitude();
                 //for now move the camera to the area of the sale
                 LatLng area = new LatLng(latitude, longitude);
-                map.moveCamera(CameraUpdateFactory.newLatLng(area));
                 //create a marker on the map for the sale object
                 Marker m = map.addMarker(new MarkerOptions().position(area));
                 //populate marker with info
@@ -345,19 +378,75 @@ String url = "";
     }
 
 
-        public void checkPermissions () {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "Permissions NOT granted, requesting....");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
-            } else {
-                Log.d(TAG, "Permissions already granted");
-            }
-
+    public void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Permissions NOT granted, requesting....");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
+        } else {
+            Log.d(TAG, "Permissions already granted");
         }
 
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+        } else {
+            Log.d(TAG, "Location access permitted...");
+        }
 
 
+    }
+
+    public void getCurrentLocation() {
+        FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Location access was denied...");
+            return;
+        }
+        flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY,null).addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                Log.d(TAG, location.toString());
+
+                Geocoder geocoder = new Geocoder(SalesActivity.this);
+                List<Address> addressList = null;
+                try {
+                    addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    LatLng currentArea = new LatLng(location.getLatitude(), location.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLng(currentArea));
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+
+                }
+
+
+            }
+        });
+
+        flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY,null).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
+                Geocoder geocoder = new Geocoder(SalesActivity.this);
+                List<Address> addresses = null;
+                try {
+                    addresses = geocoder.getFromLocationName(
+                            sales.get(0).address, 1);
+                    Address firstAddress = addresses.get(0);
+                    double latitude = firstAddress.getLatitude();
+                    double longitude = firstAddress.getLongitude();
+                    LatLng defaultArea = new LatLng(latitude, longitude);
+                    //for now move the camera to the area of the sale
+                    map.moveCamera(CameraUpdateFactory.newLatLng(defaultArea));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+
+
+    }
 }
 
 
