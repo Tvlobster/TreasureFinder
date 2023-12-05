@@ -93,6 +93,11 @@ String url = "";
         btnSalesActivity = findViewById(R.id.btnSalesActivity);
         btnProfileActivity = findViewById(R.id.btnProfileActivity);
 
+        Intent loginIntent = getIntent();
+       String userID =  loginIntent.getStringExtra("ID");
+
+       //
+
 
 
         //instantiate a new arrayList of garage sales
@@ -103,6 +108,7 @@ String url = "";
             @Override
             public void onClick(View v) {
                 Intent itemsIntent = new Intent(SalesActivity.this, ItemsActivity.class);
+                itemsIntent.putExtra("userID", userID);
                 startActivity(itemsIntent);
             }
         });
@@ -110,6 +116,7 @@ String url = "";
             @Override
             public void onClick(View v) {
                 Intent profileIntent = new Intent(SalesActivity.this, UserSales.class);
+                profileIntent.putExtra("userID", userID);
                 startActivity(profileIntent);
             }
         });
@@ -197,15 +204,14 @@ String url = "";
 
                 //Create a new intent to open up a page with the sale details
                 Intent intent = new Intent(SalesActivity.this, SaleDetail.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("title", sale.title);
-                bundle.putString("address", sale.address);
-                bundle.putString("hours", sale.hours);
-                bundle.putString("TUID", sale.TUID);
-                bundle.putStringArray("items", sale.items);
-                bundle.putString("date", sale.date);
+                intent.putExtra("title", sale.title);
+                intent.putExtra("address", sale.address);
+                intent.putExtra("owner", sale.owner);
+                intent.putExtra("hours", sale.hours);
+                intent.putExtra("TUID", sale.TUID);
+                intent.putExtra("items", sale.items);
+                intent.putExtra("date", sale.date);
 
-                intent.putExtra("saleObject", bundle);
                 startActivity(intent);
 
             }
@@ -260,6 +266,12 @@ String url = "";
                     JSONObject garageSale = listOfGarageSales.getJSONObject(i);
                     String title = garageSale.getString("title");
                     String date = garageSale.getString("date");
+
+                    JSONArray userArray = garageSale.getJSONArray("User");
+                    JSONObject userObject = userArray.getJSONObject(0);
+                    String username = userObject.getString("username");
+                    Log.d("TAG", username);
+
                     String startTime = garageSale.getString("startTime");
                     String endTime = garageSale.getString("endTime");
                     String address = garageSale.getString("address");
@@ -275,7 +287,7 @@ String url = "";
                     String hours = startTime + " - " + endTime;
 
                     //create a new garage sale object for the array
-                    garageSale newSale = new garageSale(title, address, date, hours, TUID, items);
+                    garageSale newSale = new garageSale(title, address,username, date, hours, TUID, items);
                     //push new object to array
                     sales.add(newSale);
                     Log.d("MYTAG", newSale.toString());
