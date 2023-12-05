@@ -7,38 +7,38 @@
     tools:context=".UserSales">
 
     <Button
-        android:id="@+id/btnSalesActivity2"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnViewSales"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="View Sales"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnItemsActivity2"
+        app:layout_constraintEnd_toStartOf="@+id/btnViewItems"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnItemsActivity2"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnViewItems"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="View Items"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnProfileActivity2"
+        app:layout_constraintEnd_toStartOf="@+id/btnMyProfile"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnSalesActivity2" />
+        app:layout_constraintStart_toEndOf="@+id/btnViewSales" />
 
     <Button
-        android:id="@+id/btnProfileActivity2"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnMyProfile"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="My Profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnItemsActivity2" />
+        app:layout_constraintStart_toEndOf="@+id/btnViewItems" />
 
     <TextView
         android:id="@+id/txtWelcome"
@@ -46,133 +46,34 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:gravity="start"
-        android:text="Your Sales"
+        android:text="My Sales"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:layout_width="405dp"
-        android:layout_height="320dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtWelcome" />
-
-    <EditText
-        android:id="@+id/etAddSaleName"
+    <Button
+        android:id="@+id/btnAddSale"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Enter Sale Name"
-        android:inputType="text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/_dynamic" />
-
-    <EditText
-        android:id="@+id/etAddItemName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="128dp"
-        android:ems="10"
-        android:hint="Enter Item Name"
-        android:inputType="text"
-        android:visibility="invisible"
+        android:layout_marginBottom="32dp"
+        android:text="Add A New Sale"
+        app:layout_constraintBottom_toTopOf="@+id/btnViewItems"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/etAddAddress"
+    <ListView
+        android:id="@+id/lstSales"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="Enter Address"
-        android:inputType="text"
-        android:visibility="visible"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddSale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAddSaleName" />
-
-    <EditText
-        android:id="@+id/etAddHours"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="Enter Hours of Operation"
-        android:inputType="text"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAddAddress" />
-
-    <EditText
-        android:id="@+id/etAddItemDesc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="Enter Item Description"
-        android:inputType="text"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAddAddress" />
-
-    <EditText
-        android:id="@+id/etAddPrice"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Enter Price"
-        android:inputType="number|numberDecimal"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAddSaleName" />
-
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:text="Save"
-        app:layout_constraintEnd_toStartOf="@+id/btnCancel"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAddHours" />
-
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="32dp"
-        android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSave"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnSave"
-        app:layout_constraintTop_toTopOf="@+id/btnSave" />
+        app:layout_constraintTop_toBottomOf="@+id/txtWelcome" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
