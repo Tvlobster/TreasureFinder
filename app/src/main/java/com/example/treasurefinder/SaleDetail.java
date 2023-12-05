@@ -19,6 +19,7 @@ import com.example.treasurefinder.databinding.ActivitySaleDetailBinding;
 
 public class SaleDetail extends AppCompatActivity {
 
+
     private AppBarConfiguration appBarConfiguration;
     private ActivitySaleDetailBinding binding;
 
@@ -37,14 +38,14 @@ public class SaleDetail extends AppCompatActivity {
         getSupportActionBar().setTitle("Garage Sale Details");
 
 
+
+
         //listener for X button
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //put in code to return back to the sale
-                Intent intent = new Intent(SaleDetail.this, SalesActivity.class);
-                startActivity(intent);
+                //exit out of the pop up screen
+               finish();
 
             }
         });

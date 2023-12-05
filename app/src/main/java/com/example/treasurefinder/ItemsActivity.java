@@ -34,6 +34,7 @@ public class ItemsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
 
+
         items = new ArrayList<>();
 
         lstItems = findViewById(R.id.lstItems);
