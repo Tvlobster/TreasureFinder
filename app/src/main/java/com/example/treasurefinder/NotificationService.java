@@ -136,14 +136,14 @@ public class NotificationService extends Service {
         //Calls method to create a notification channel
         createNotificationChannel();
 
-//        //Creates a new dismiss receiver
-//        DismissReceiver receiver = new DismissReceiver();
-//
-//        //creates new intent filter for dismissing a notification
-//        IntentFilter filter = new IntentFilter("dismiss_broadcast");
-//
-//        //register dissmissReceiver so pending intent can be closed
-//        registerReceiver(receiver,filter);
+        //Creates a new dismiss receiver
+        DismissReceiver receiver = new DismissReceiver();
+
+        //creates new intent filter for dismissing a notification
+        IntentFilter filter = new IntentFilter("dismiss_broadcast");
+
+        //register dissmissReceiver so pending intent can be closed
+        registerReceiver(receiver,filter);
 
         //Attempts to connect client socket to server socket
         mSocket.connect();
@@ -168,17 +168,17 @@ public class NotificationService extends Service {
         Log.d(TAG, "Main Channel created");
     }
 
-//    class DismissReceiver extends BroadcastReceiver {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            switch(intent.getAction()){
-//                case "dismiss_broadcast":
-//                    Toast.makeText(context,"Notification was dismissed",Toast.LENGTH_LONG).show();
-//                    break;
-//            }
-//        }
-//    }
+    class DismissReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch(intent.getAction()){
+                case "dismiss_broadcast":
+                    Toast.makeText(context,"Notification was dismissed",Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+    }
 
     private Notification createForegroundNotification() {
         // Create a notification channel if necessary
