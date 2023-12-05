@@ -36,20 +36,15 @@ String saleInfoString, itemInfoString;
 String[] saleInfoData, itemInfoData;
 RequestQueue queue;
 Boolean itemsFlag = true;
+    ItemAdapter adapter;
 
 
+    ArrayList<Item> items;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
-        binding = FragmentFirstBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-
-    }
-
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        items = new ArrayList<>();
 
 
         //retrieve sale info string from SaleDetail Activity
@@ -66,6 +61,19 @@ Boolean itemsFlag = true;
 
         //check to see if this sale has items posted
         //if they do not
+
+
+        binding = FragmentFirstBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ListView lvSaleItems = view.findViewById(R.id.lvSaleItems);
+
+
         if(itemInfoString.equals(""))
             itemsFlag=false;
             //if they do, display them
@@ -107,12 +115,17 @@ Boolean itemsFlag = true;
                         String imgUrl = saleItem.getString("image");
                         String description = saleItem.getString("description");
                         for(int x=0;x<itemInfoData.length;x++){
-                            if(ID.equals(itemInfoData)){
+                            if(ID.equals(itemInfoData[x])){
                                 Item newItem = new Item(name,priceDbl, description);
+                                items.add(newItem);
                             }
                         }
 
                     }
+                    //create a new adapter with all the sales and set the adapter for the list view
+                    adapter = new ItemAdapter(items, getContext());
+                  Log.d("TEST", items.toString());
+                    lvSaleItems.setAdapter(adapter);
 
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -130,12 +143,10 @@ Boolean itemsFlag = true;
         }
 
       //  Item newItem = new Item("john",23, "test");
-
         TextView tvOwner = view.findViewById(R.id.tvOwner);
         TextView tvAddress = view.findViewById(R.id.tvAddress);
         TextView tvHours = view.findViewById(R.id.tvHours);
         TextView tvFeaturedItems = view.findViewById(R.id.tvFeaturedItems);
-        ListView lstItems = view.findViewById(R.id.lstItems);
 
 
         tvOwner.setText("Hosted By: "+ saleInfoData[2]);
