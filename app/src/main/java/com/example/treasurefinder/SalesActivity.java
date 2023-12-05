@@ -212,7 +212,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         map.setInfoWindowAdapter(new garageSaleInfoWindow());
         //when map is ready, call to get server info. This method calls add markers
         requestInfo();
-
+        //getCurrentLocation();
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -345,7 +345,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         //add the request to the queue
         queue.add(r);
 
-        getCurrentLocation();
+
 
     }
 
@@ -364,8 +364,10 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                 double longitude = firstAddress.getLongitude();
                 //for now move the camera to the area of the sale
                 LatLng area = new LatLng(latitude, longitude);
+
                 //create a marker on the map for the sale object
                 Marker m = map.addMarker(new MarkerOptions().position(area));
+                map.moveCamera(CameraUpdateFactory.newLatLng(area));
                 //populate marker with info
                 m.setTitle(sales.get(i).title + "");
                 m.setSnippet(sales.get(i).address + "");
@@ -396,57 +398,6 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
-    public void getCurrentLocation() {
-        FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Location access was denied...");
-            return;
-        }
-        flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY,null).addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                Log.d(TAG, location.toString());
-
-                Geocoder geocoder = new Geocoder(SalesActivity.this);
-                List<Address> addressList = null;
-                try {
-                    addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    LatLng currentArea = new LatLng(location.getLatitude(), location.getLongitude());
-                    map.moveCamera(CameraUpdateFactory.newLatLng(currentArea));
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-
-                }
-
-
-            }
-        });
-
-        flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY,null).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
-                Geocoder geocoder = new Geocoder(SalesActivity.this);
-                List<Address> addresses = null;
-                try {
-                    addresses = geocoder.getFromLocationName(
-                            sales.get(0).address, 1);
-                    Address firstAddress = addresses.get(0);
-                    double latitude = firstAddress.getLatitude();
-                    double longitude = firstAddress.getLongitude();
-                    LatLng defaultArea = new LatLng(latitude, longitude);
-                    //for now move the camera to the area of the sale
-                    map.moveCamera(CameraUpdateFactory.newLatLng(defaultArea));
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-            }
-        });
-
-
-    }
 }
 
 
