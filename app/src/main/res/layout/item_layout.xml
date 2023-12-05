@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/txtItemName"
@@ -38,7 +39,7 @@
         android:text="Description:"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/txtItemName"
         app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

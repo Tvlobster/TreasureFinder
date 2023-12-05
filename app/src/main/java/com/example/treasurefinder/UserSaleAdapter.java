@@ -36,7 +36,7 @@ public class UserSaleAdapter extends BaseAdapter {
         TextView txtItemCount = view.findViewById(R.id.txtYourSaleCount);
         TextView txtAddress = view.findViewById(R.id.txtYourSaleAddress);
         txtSaleTitle.setText(sale.title);
-        txtItemCount.setText("0 Items");
+        txtItemCount.setText(sale.items.length + " items");
         txtAddress.setText(sale.address);
 
         return view;
