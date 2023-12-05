@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ItemAdapter extends BaseAdapter {
+public class ItemAdapter extends BaseAdapter  {
     ArrayList<Item> items;
     Context context;
 
