@@ -88,22 +88,25 @@ public class MainActivity extends AppCompatActivity {
             //Creates a new JSON request to send the username and password over to the server for login
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
                 try {
-                    //Try to set serverResponse to string held under id tag in server response
-                    serverResponse = response.get("id").toString();
 
-                    //If server response read ERROR
-                    if (serverResponse.equals("ERROR")) {
-                        //Show toast stating login info was wrong
-                        Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
-                    }
+                    //If statement checks to see if the server response contains id
+                    if(response.has("id")) {
+                        //If so,
 
-                    //If not
-                    else {
+                        //set serverResponse to string held under id tag in server response
+                        serverResponse = response.get("id").toString();
+
                         //Create new intent for SalesActivity, put serverResponse in intent, launch intent
                         Intent i = new Intent(this, SalesActivity.class);
                         i.putExtra("ID", serverResponse);
                         startActivity(i);
                     }
+
+                    else {
+                        //Show toast stating login info was wrong
+                        Toast.makeText(this, "ERROR: LOGIN INFORMATION WRONG", Toast.LENGTH_SHORT).show();
+                    }
+
 
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
