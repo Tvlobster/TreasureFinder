@@ -68,7 +68,6 @@ public class ItemsActivity extends AppCompatActivity {
     public void getItems() throws JSONException {
         Intent intent = this.getIntent();
         userID = intent.getStringExtra("userID");
-        Log.d("userID", userID);
         queue = Volley.newRequestQueue(this.getApplicationContext());
 
         JSONObject j = new JSONObject();

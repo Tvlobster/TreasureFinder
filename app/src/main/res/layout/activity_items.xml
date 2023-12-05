@@ -8,11 +8,11 @@
 
     <Button
         android:id="@+id/btnItemsActivity4"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="View Items"
         android:backgroundTint="#B095DF"
+        android:text="View Items"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnProfileActivity3"
         app:layout_constraintHorizontal_bias="0.5"
@@ -20,7 +20,7 @@
 
     <Button
         android:id="@+id/btnProfileActivity3"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="My Profile"
@@ -31,7 +31,7 @@
 
     <Button
         android:id="@+id/btnSalesActivity3"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="View Sales"

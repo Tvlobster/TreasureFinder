@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp">
 
     <Button
         android:id="@+id/btnYourSaleEdit"
@@ -27,33 +28,41 @@
 
     <TextView
         android:id="@+id/txtYourSaleTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:text="Title"
         android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnYourSaleEdit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtYourSaleAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:text="Address"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/txtYourSaleTitle"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btnYourSaleEdit"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtYourSaleTitle" />
 
     <TextView
         android:id="@+id/txtYourSaleCount"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:text="0 Items"
         android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnYourSaleDelete"
         app:layout_constraintStart_toStartOf="@+id/txtYourSaleAddress"
         app:layout_constraintTop_toBottomOf="@+id/txtYourSaleAddress" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
