@@ -3,7 +3,9 @@ package com.example.treasurefinder;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.LauncherActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -47,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
     //serverResponse for storing response from server for login
     String serverResponse;
 
+    SharedPreferences sharedPref;
+
+    SharedPreferences.Editor prefEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +69,21 @@ public class MainActivity extends AppCompatActivity {
 
         //Instantiates Queue
         queue = Volley.newRequestQueue(this.getApplicationContext());
+
+        //Create a shared preference to pass userID between views
+        sharedPref = this.getSharedPreferences("user", Context.MODE_PRIVATE);
+
+        prefEditor = sharedPref.edit();
+
+        if(sharedPref.contains("id")) {
+
+            String s = sharedPref.getString("id", "0");
+
+            if(s.equals("0") == false) {
+             Intent i = new Intent(this, SalesActivity.class);
+             startActivity(i);
+            }
+        }
     }
 
     public void login(View v) throws JSONException {
@@ -98,7 +119,9 @@ public class MainActivity extends AppCompatActivity {
 
                         //Create new intent for SalesActivity, put serverResponse in intent, launch intent
                         Intent i = new Intent(this, SalesActivity.class);
-                        i.putExtra("ID", serverResponse);
+
+                        prefEditor.putString("id", serverResponse);
+
                         startActivity(i);
                     }
 
