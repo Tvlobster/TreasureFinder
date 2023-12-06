@@ -165,7 +165,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         });
 
 
-        checkPermissions();
+//        checkPermissions();
         Intent i = new Intent(this, NotificationService.class);
         startForegroundService(i);
         getCurrentLocation();
@@ -380,22 +380,22 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-    public void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Permissions NOT granted, requesting....");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
-        } else {
-            Log.d(TAG, "Permissions already granted");
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-        } else {
-            Log.d(TAG, "Location access permitted...");
-        }
-
-
-    }
+//    public void checkPermissions() {
+//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+//            Log.d(TAG, "Permissions NOT granted, requesting....");
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
+//        } else {
+//            Log.d(TAG, "Permissions already granted");
+//        }
+//
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+//        } else {
+//            Log.d(TAG, "Location access permitted...");
+//        }
+//
+//
+//    }
 
     public void getCurrentLocation() {
         FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);

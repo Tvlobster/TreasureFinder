@@ -205,7 +205,7 @@ public class NotificationService extends Service {
         //creates new intent filter for dismissing a notification
         IntentFilter filter = new IntentFilter("dismiss_broadcast");
 
-        //register dissmissReceiver so pending intent can be closed
+        //register dismissReceiver so pending intent can be closed
         registerReceiver(receiver,filter);
 
         //Attempts to connect client socket to server socket
