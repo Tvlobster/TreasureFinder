@@ -1,6 +1,7 @@
 package com.example.treasurefinder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -71,8 +70,11 @@ public class UserSaleAdapter extends BaseAdapter {
         });
 
         btnView.setOnClickListener(e-> {
-
+            Intent intent = new Intent(this.context, AddNewItem.class);
+            intent.putExtra("saleID", sale.TUID);
+            context.startActivity(intent);
         });
+
         return view;
 
 

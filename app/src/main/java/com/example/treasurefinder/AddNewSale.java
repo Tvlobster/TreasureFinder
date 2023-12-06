@@ -31,12 +31,12 @@ public class AddNewSale extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_sale);
 
-        btnSave = findViewById(R.id.btnSave);
-        btnCancel = findViewById(R.id.btnCancel);
+        btnSave = findViewById(R.id.btnAddItemSave);
+        btnCancel = findViewById(R.id.btnAddItemCancel);
 
-        etSaleName = findViewById(R.id.etSaleName);
-        etDate = findViewById(R.id.etDate);
-        etAddress = findViewById(R.id.etAddress);
+        etSaleName = findViewById(R.id.etAddItemName);
+        etDate = findViewById(R.id.etAddPrice);
+        etAddress = findViewById(R.id.etAddItemDesc);
         etStartTime = findViewById(R.id.etStartTime);
         etEndTime = findViewById(R.id.etEndTime);
 

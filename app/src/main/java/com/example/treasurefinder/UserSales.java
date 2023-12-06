@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -40,7 +38,7 @@ public class UserSales extends AppCompatActivity {
         btnViewSales = findViewById(R.id.btnViewSales);
         btnViewItems = findViewById(R.id.btnViewItems);
         btnMyProfile = findViewById(R.id.btnMyProfile);
-        btnAddSale = findViewById(R.id.btnAddSale);
+        btnAddSale = findViewById(R.id.btnAddItems);
         lstMySales = findViewById(R.id.lstSales);
         txtWelcome = findViewById(R.id.txtWelcome);
         btnLogout = findViewById(R.id.btnLogout);
