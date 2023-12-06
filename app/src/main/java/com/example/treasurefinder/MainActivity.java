@@ -96,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        checkNotificationPermissions();
-        checkLocationPermissions();
+        checkPermissions();
     }
 
     public void login(View v) throws JSONException {
@@ -164,20 +163,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void checkNotificationPermissions() {
+    public void checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Permissions NOT granted, requesting....");
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.ACCESS_FINE_LOCATION}, NOTIFICATION_REQUEST_CODE);
         } else {
             Log.d(TAG, "Permissions already granted");
-        }
-    }
-
-    public void checkLocationPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-        } else {
-            Log.d(TAG, "Location access permitted...");
         }
     }
 }
