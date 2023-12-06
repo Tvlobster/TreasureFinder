@@ -1,10 +1,15 @@
 package com.example.treasurefinder;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.LauncherActivity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +36,11 @@ import java.net.CookieManager;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static final int LOCATION_REQUEST_CODE = 111;
 
+    public static final String TAG = "NotifServiceTag";
+
+    public static final int NOTIFICATION_REQUEST_CODE = 1;
     //TextView for username
     TextView txtUsername;
 
@@ -51,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        checkPermissions();
 
         //sets username and password textviews to their respective views
         txtUsername = findViewById(R.id.txtUsername);
@@ -125,5 +136,22 @@ public class MainActivity extends AppCompatActivity {
         //Create and launch intent for sign up
         Intent i = new Intent(this, SignUp.class);
         startActivity(i);
+    }
+
+    public void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Permissions NOT granted, requesting....");
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
+        } else {
+            Log.d(TAG, "Permissions already granted");
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+        } else {
+            Log.d(TAG, "Location access permitted...");
+        }
+
+
     }
 }

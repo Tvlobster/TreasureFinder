@@ -35,6 +35,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -165,9 +166,10 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         });
 
 
-        checkPermissions();
+
         Intent i = new Intent(this, NotificationService.class);
         startForegroundService(i);
+        getLastLocation();
         getCurrentLocation();
 
         lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -335,7 +337,8 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                 }
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+               // throw new RuntimeException(e);
+                Log.d(TAG,e.toString());
             }
 
         }, error -> {
@@ -366,7 +369,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 //create a marker on the map for the sale object
                 Marker m = map.addMarker(new MarkerOptions().position(area));
-              //  map.moveCamera(CameraUpdateFactory.newLatLng(area));
+                //  map.moveCamera(CameraUpdateFactory.newLatLng(area));
                 //populate marker with info
                 m.setTitle(sales.get(i).title + "");
                 m.setSnippet(sales.get(i).address + "");
@@ -380,22 +383,23 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-    public void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Permissions NOT granted, requesting....");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
-        } else {
-            Log.d(TAG, "Permissions already granted");
+
+
+    public void getLastLocation() {
+        FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Location access was denied...");
+            return;
         }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-        } else {
-            Log.d(TAG, "Location access permitted...");
-        }
-
-
+        flpClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                LatLng area = new LatLng(location.getLatitude(), location.getLongitude());
+                map.moveCamera(CameraUpdateFactory.newLatLng(area));
+            }
+        });
     }
+
 
     public void getCurrentLocation() {
         FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
