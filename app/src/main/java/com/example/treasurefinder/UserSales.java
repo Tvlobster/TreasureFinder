@@ -8,10 +8,12 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -21,9 +23,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class UserSales extends AppCompatActivity {
+    TextView txtWelcome;
     ArrayList<garageSale> sales;
     UserSaleAdapter adapter;
-    Button btnViewSales, btnViewItems, btnMyProfile, btnAddSale;
+    Button btnViewSales, btnViewItems, btnMyProfile, btnAddSale, btnLogout;
     ListView lstMySales;
     RequestQueue queue;
     String URL = "https://treasurefinderbackend.onrender.com/user/garageSales";
@@ -33,12 +36,14 @@ public class UserSales extends AppCompatActivity {
         setContentView(R.layout.activity_user_sales);
 
         sales = new ArrayList<>();
-
+        queue = Volley.newRequestQueue(this.getApplicationContext());
         btnViewSales = findViewById(R.id.btnViewSales);
         btnViewItems = findViewById(R.id.btnViewItems);
         btnMyProfile = findViewById(R.id.btnMyProfile);
         btnAddSale = findViewById(R.id.btnAddSale);
         lstMySales = findViewById(R.id.lstSales);
+        txtWelcome = findViewById(R.id.txtWelcome);
+        btnLogout = findViewById(R.id.btnLogout);
 
         btnViewSales.setOnClickListener(v->{
             Intent salesIntent = new Intent(UserSales.this, SalesActivity.class);
@@ -60,6 +65,16 @@ public class UserSales extends AppCompatActivity {
             startActivity(addSaleIntent);
         });
 
+        btnLogout.setOnClickListener(e-> {
+            String URLlogout = "https://treasurefinderbackend.onrender.com/users/logout";
+            Intent logout = new Intent(UserSales.this, Login.class);
+            JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URLlogout, null, response -> {
+                Log.d("Logout", "Successfully logged out");
+            },error -> {});
+            queue.add(r);
+            startActivity(logout);
+        });
+
         getSales();
 
         adapter = new UserSaleAdapter(sales, this.getApplicationContext());
@@ -68,7 +83,6 @@ public class UserSales extends AppCompatActivity {
     }
 
     public void getSales() {
-        queue = Volley.newRequestQueue(this.getApplicationContext());
         JSONObject j = new JSONObject();
         JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
             Log.d("Sales", response.toString());
