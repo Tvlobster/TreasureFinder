@@ -47,9 +47,6 @@ public class SaleDetail extends AppCompatActivity {
         getSupportActionBar().setTitle(title);
 
 
-
-
-
         //listener for X button
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
