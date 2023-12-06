@@ -168,7 +168,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         checkPermissions();
         Intent i = new Intent(this, NotificationService.class);
         startForegroundService(i);
-
+        getCurrentLocation();
 
         lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -346,7 +346,6 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         queue.add(r);
 
 
-
     }
 
     //this method adds markers on the map for each sale location in the sales array
@@ -367,7 +366,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 //create a marker on the map for the sale object
                 Marker m = map.addMarker(new MarkerOptions().position(area));
-                map.moveCamera(CameraUpdateFactory.newLatLng(area));
+              //  map.moveCamera(CameraUpdateFactory.newLatLng(area));
                 //populate marker with info
                 m.setTitle(sales.get(i).title + "");
                 m.setSnippet(sales.get(i).address + "");
@@ -377,6 +376,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             }
 
         }
+
     }
 
 
@@ -388,7 +388,6 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             Log.d(TAG, "Permissions already granted");
         }
 
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
         } else {
@@ -398,6 +397,29 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
+    public void getCurrentLocation() {
+        FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Location access was denied...");
+            return;
+        }
+        flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(location -> {
+            Log.d(TAG, location.toString());
+            Geocoder geocoder = new Geocoder(SalesActivity.this);
+            LatLng area = new LatLng(location.getLatitude(), location.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newLatLng(area));
+            Log.d("Location", area.toString());
+
+        });
+
+        flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        });
+
+    }
 }
 
 
