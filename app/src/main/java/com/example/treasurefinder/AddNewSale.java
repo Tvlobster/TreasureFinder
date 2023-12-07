@@ -79,6 +79,8 @@ public class AddNewSale extends AppCompatActivity {
 
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
                 Toast.makeText(this, "Sale created successfully!", Toast.LENGTH_SHORT).show();
+                Intent it = new Intent();
+                setResult(222, it);
                 finish();
             }, error -> {
                 Toast.makeText(this, "Sale could not be added...", Toast.LENGTH_SHORT).show();

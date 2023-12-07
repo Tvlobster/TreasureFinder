@@ -39,6 +39,7 @@ public class UserSaleAdapter extends BaseAdapter {
         return 0;
     }
 
+    //add adapter to list view
     @Override
     public View getView(int i, View view, ViewGroup parent) {
         view = LayoutInflater.from(context).inflate(R.layout.your_sales_layout, parent, false);
@@ -46,7 +47,7 @@ public class UserSaleAdapter extends BaseAdapter {
         TextView txtSaleTitle = view.findViewById(R.id.txtYourSaleTitle);
         TextView txtItemCount = view.findViewById(R.id.txtYourSaleCount);
         TextView txtAddress = view.findViewById(R.id.txtYourSaleAddress);
-        Button btnDelete = view.findViewById(R.id.btnYourSaleDelete);
+        Button btnDelete = view.findViewById(R.id.btnYourItemDelete);
         Button btnView = view.findViewById(R.id.btnYourSaleView);
         txtSaleTitle.setText(sale.title);
         txtItemCount.setText(sale.items.length + " items");
@@ -70,7 +71,8 @@ public class UserSaleAdapter extends BaseAdapter {
         });
 
         btnView.setOnClickListener(e-> {
-            Intent intent = new Intent(this.context, AddNewItem.class);
+            Intent intent = new Intent(context, UserItems.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("saleID", sale.TUID);
             context.startActivity(intent);
         });
