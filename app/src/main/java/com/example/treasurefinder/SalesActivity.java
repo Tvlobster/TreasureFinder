@@ -165,10 +165,10 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         });
 
 
-//        checkPermissions();
+
         Intent i = new Intent(this, NotificationService.class);
         startForegroundService(i);
-        getCurrentLocation();
+
 
         lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -335,7 +335,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                 }
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+
             }
 
         }, error -> {
@@ -366,7 +366,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 //create a marker on the map for the sale object
                 Marker m = map.addMarker(new MarkerOptions().position(area));
-              //  map.moveCamera(CameraUpdateFactory.newLatLng(area));
+                map.moveCamera(CameraUpdateFactory.newLatLng(area));
                 //populate marker with info
                 m.setTitle(sales.get(i).title + "");
                 m.setSnippet(sales.get(i).address + "");
@@ -396,7 +396,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 //
 //
 //    }
-
+/*
     public void getCurrentLocation() {
         FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -420,6 +420,8 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         });
 
     }
+
+ */
 }
 
 
