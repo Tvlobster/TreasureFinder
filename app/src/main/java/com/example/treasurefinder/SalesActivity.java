@@ -75,6 +75,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
     SaleAdapter adapter;
     RequestQueue queue;
+    Boolean locationFlag = true;
     Button btnSalesActivity, btnItemsActivity, btnProfileActivity;
     public static final int LOCATION_REQUEST_CODE = 111;
 
@@ -384,6 +385,24 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             }
 
         }
+        if(locationFlag ==false){
+            try{
+                    //move camera to first location in DB
+                    Geocoder geocoder = new Geocoder(this);
+                    List<Address> addresses = geocoder.getFromLocationName(
+                            sales.get(0).address, 1);
+                    Address firstAddress = addresses.get(0);
+                    double latitude = firstAddress.getLatitude();
+                    double longitude = firstAddress.getLongitude();
+                    //for now move the camera to the area of the sale
+                    LatLng area = new LatLng(latitude, longitude);
+                    map.moveCamera(CameraUpdateFactory.newLatLng(area));
+
+                }
+            catch (Exception ex){
+                Log.d(TAG, "There are no sales currently");
+            }
+        }
 
     }
 
@@ -430,6 +449,7 @@ public void getLastLocation() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Location access was denied...");
+            locationFlag = false;
             return;
         }
         flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(location -> {
@@ -445,6 +465,7 @@ public void getLastLocation() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, e.toString());
+                locationFlag = false;
             }
         });
 
