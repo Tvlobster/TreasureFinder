@@ -116,7 +116,7 @@ Boolean itemsFlag = true;
                         String description = saleItem.getString("description");
                         for(int x=0;x<itemInfoData.length;x++){
                             if(ID.equals(itemInfoData[x])){
-                                Item newItem = new Item(name,priceDbl, description);
+                                Item newItem = new Item(name,priceDbl, description,ID);
                                 items.add(newItem);
                             }
                         }

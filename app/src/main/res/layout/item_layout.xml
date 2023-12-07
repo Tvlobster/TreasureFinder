@@ -24,7 +24,7 @@
         android:layout_marginTop="16dp"
         android:text="$50"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/btnRequest"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/txtItemName"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Request"
