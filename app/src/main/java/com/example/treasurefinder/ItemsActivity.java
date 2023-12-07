@@ -78,7 +78,7 @@ public class ItemsActivity extends AppCompatActivity {
                 for(int i=0;i<listOfItems.length();i++){
                     JSONObject item = (JSONObject) listOfItems.get(i);
                     if(!item.getString("owner").equals(userID)){
-                        Item newItem = new Item(item.getString("name"), item.getDouble("price"), item.getString("description"));
+                        Item newItem = new Item(item.getString("name"), item.getDouble("price"), item.getString("description"), item.getString("_id"));
                         items.add(newItem);
                         adapter.notifyDataSetChanged();
                     }

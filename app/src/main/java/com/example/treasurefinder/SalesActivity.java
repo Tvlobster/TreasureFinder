@@ -75,6 +75,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
     SaleAdapter adapter;
     RequestQueue queue;
+    Boolean locationFlag = true;
     Button btnSalesActivity, btnItemsActivity, btnProfileActivity;
     public static final int LOCATION_REQUEST_CODE = 111;
 
@@ -88,6 +89,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
     String url = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +102,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
         Intent loginIntent = getIntent();
         String userID = loginIntent.getStringExtra("ID");
+
 
 
         //instantiate a new arrayList of garage sales
@@ -165,10 +168,11 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         });
 
 
-//        checkPermissions();
+
         Intent i = new Intent(this, NotificationService.class);
         startForegroundService(i);
-        getCurrentLocation();
+     //  getLastLocation();
+      //  getCurrentLocation();
 
         lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -211,8 +215,12 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         map = googleMap;
         map.setInfoWindowAdapter(new garageSaleInfoWindow());
         //when map is ready, call to get server info. This method calls add markers
+        getCurrentLocation();
         requestInfo();
-        //getCurrentLocation();
+
+
+
+
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -332,10 +340,11 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
                     //call this method to add markers based on retrieved sale locations
                     addMarkers();
+
                 }
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+
             }
 
         }, error -> {
@@ -366,7 +375,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 //create a marker on the map for the sale object
                 Marker m = map.addMarker(new MarkerOptions().position(area));
-              //  map.moveCamera(CameraUpdateFactory.newLatLng(area));
+               // map.moveCamera(CameraUpdateFactory.newLatLng(area));
                 //populate marker with info
                 m.setTitle(sales.get(i).title + "");
                 m.setSnippet(sales.get(i).address + "");
@@ -375,6 +384,24 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                 Log.d("TEST", "This is not a valid location, cannot place marker");
             }
 
+        }
+        if(locationFlag ==false){
+            try{
+                    //move camera to first location in DB
+                    Geocoder geocoder = new Geocoder(this);
+                    List<Address> addresses = geocoder.getFromLocationName(
+                            sales.get(0).address, 1);
+                    Address firstAddress = addresses.get(0);
+                    double latitude = firstAddress.getLatitude();
+                    double longitude = firstAddress.getLongitude();
+                    //for now move the camera to the area of the sale
+                    LatLng area = new LatLng(latitude, longitude);
+                    map.moveCamera(CameraUpdateFactory.newLatLng(area));
+
+                }
+            catch (Exception ex){
+                Log.d(TAG, "There are no sales currently");
+            }
         }
 
     }
@@ -396,11 +423,33 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 //
 //
 //    }
+    /*
+public void getLastLocation() {
+    FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
+    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        Log.d(TAG, "Location access was denied...");
+        return;
+    }
 
+    flpClient.getLastLocation().addOnSuccessListener(location -> {
+        Log.d(TAG, location.toString());
+        Geocoder geocoder = new Geocoder(SalesActivity.this);
+        LatLng area = new LatLng(location.getLatitude(), location.getLongitude());
+        map.moveCamera(CameraUpdateFactory.newLatLng(area));
+        Log.d("Location", area.toString());
+
+    });
+    flpClient.getLastLocation().addOnFailureListener(e -> Log.d(TAG, e.toString()));
+
+}
+
+*/
     public void getCurrentLocation() {
         FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Location access was denied...");
+            locationFlag = false;
             return;
         }
         flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(location -> {
@@ -416,10 +465,13 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, e.toString());
+                locationFlag = false;
             }
         });
 
     }
+
+
 }
 
 
