@@ -54,14 +54,16 @@ public class MainActivity extends AppCompatActivity {
     //serverResponse for storing response from server for login
     String serverResponse;
 
+    //Shared preference to pass user ID
     SharedPreferences sharedPref;
 
+    //Editor to put userID into shared preferences
     SharedPreferences.Editor prefEditor;
 
-    public static final int LOCATION_REQUEST_CODE = 111;
-
+    //Debug tag
     public static final String TAG = "NotifServiceTag";
 
+    //Notification request code
     public static final int NOTIFICATION_REQUEST_CODE = 1;
 
     @Override
@@ -84,19 +86,27 @@ public class MainActivity extends AppCompatActivity {
         //Create a shared preference to pass userID between views
         sharedPref = this.getSharedPreferences("user", Context.MODE_PRIVATE);
 
+        //Instantiate preference editor
         prefEditor = sharedPref.edit();
 
+        //Call checkPermissions method
+        checkPermissions();
+
+        //If statement checks to see if sharedPreference contains id tag
         if(sharedPref.contains("id")) {
 
+            //If so, create a new string using get string on the id tag in shared preference
             String s = sharedPref.getString("id", "0");
 
+            //Check to make sure that string does not read 0
+            //(0 denotes id does not exist)
             if(s.equals("0") == false) {
-             Intent i = new Intent(this, SalesActivity.class);
-             startActivity(i);
+
+                //If string does not read 0, launch salesActivity intent
+                Intent i = new Intent(this, SalesActivity.class);
+                startActivity(i);
             }
         }
-
-        checkPermissions();
     }
 
     public void login(View v) throws JSONException {
@@ -164,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkPermissions() {
+        //If statement to check permissions for location use and to post notifications
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Permissions NOT granted, requesting....");
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.ACCESS_FINE_LOCATION}, NOTIFICATION_REQUEST_CODE);
