@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent i = new Intent(this, SalesActivity.class);
 
                         prefEditor.putString("id", serverResponse);
+                        prefEditor.apply();
 
                         startActivity(i);
                     }
