@@ -1,19 +1,19 @@
 package com.example.treasurefinder;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -30,6 +30,8 @@ public class UserSales extends AppCompatActivity {
     ListView lstMySales;
     RequestQueue queue;
     String URL = "https://treasurefinderbackend.onrender.com/user/garageSales";
+    //result launcher to check when returned from adding sale
+    ActivityResultLauncher resultLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +42,12 @@ public class UserSales extends AppCompatActivity {
         btnViewSales = findViewById(R.id.btnViewSales);
         btnViewItems = findViewById(R.id.btnViewItems);
         btnMyProfile = findViewById(R.id.btnMyProfile);
-        btnAddSale = findViewById(R.id.btnAddSale);
-        lstMySales = findViewById(R.id.lstSales);
+        btnAddSale = findViewById(R.id.btnAddItems);
+        lstMySales = findViewById(R.id.lstUserItems);
         txtWelcome = findViewById(R.id.txtWelcome);
         btnLogout = findViewById(R.id.btnLogout);
 
+        //launch activities for nav bar
         btnViewSales.setOnClickListener(v->{
             Intent salesIntent = new Intent(UserSales.this, SalesActivity.class);
             startActivity(salesIntent);
@@ -60,13 +63,25 @@ public class UserSales extends AppCompatActivity {
             startActivity(profileIntent);
         });
 
+        //result launcher for when sale is added
+        resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result-> {
+            Log.d("result", "Activity finished");
+            //get update on return and refresh adapter
+            getSales();
+            adapter = new UserSaleAdapter(sales, this.getApplicationContext());
+            lstMySales.setAdapter(adapter);
+        });
+        //launch result launcher for if a sale was added
         btnAddSale.setOnClickListener(v->{
-            Intent addSaleIntent = new Intent(UserSales.this, AddNewSale.class);
-            startActivity(addSaleIntent);
+            Intent addSaleIntent = new Intent(UserSales.this, AddNewSale.class);;
+            setResult(222, addSaleIntent);
+            resultLauncher.launch(addSaleIntent);
         });
 
+        //logout button
         btnLogout.setOnClickListener(e-> {
             String URLlogout = "https://treasurefinderbackend.onrender.com/users/logout";
+            //launch login activity and post for logout
             Intent logout = new Intent(UserSales.this, Login.class);
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URLlogout, null, response -> {
                 Log.d("Logout", "Successfully logged out");
@@ -80,16 +95,21 @@ public class UserSales extends AppCompatActivity {
         adapter = new UserSaleAdapter(sales, this.getApplicationContext());
         lstMySales.setAdapter(adapter);
 
-    }
 
+
+    }
+    //get sales for adapter
     public void getSales() {
+        sales = new ArrayList<>();
         JSONObject j = new JSONObject();
         JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
             Log.d("Sales", response.toString());
             try {
+                //parse json for sale information
                 JSONObject user = (JSONObject) response.get("users");
                 JSONArray jsonSales = user.getJSONArray("GarageSale");
                 for(int i=0; i<jsonSales.length(); i++) {
+                    //create sale object and add to array list
                     Log.d("Sale", jsonSales.get(i).toString());
                     JSONObject sale = (JSONObject) jsonSales.get(i);
                     String title = sale.getString("title");
@@ -101,10 +121,10 @@ public class UserSales extends AppCompatActivity {
                     String hours = startTime + "-" + endTime;
                     String tuid = sale.getString("_id");
                     JSONArray items = sale.getJSONArray("items");
-                    String[] itemsArr= new String[items.length()];
-                    for(int k=0; k<items.length();k++)
-                        itemsArr[k] = (String) items.get(k);
-
+                    String[] itemsArr = new String[items.length()];
+                    for(int k=0; k<itemsArr.length; k++) {
+                        itemsArr[k] = items.get(k).toString();
+                    }
                     garageSale userSale = new garageSale(title, address, owner, date, hours, tuid, itemsArr);
                     sales.add(userSale);
                     adapter.notifyDataSetChanged();

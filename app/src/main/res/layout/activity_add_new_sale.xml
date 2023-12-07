@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <EditText
-        android:id="@+id/etSaleName"
+        android:id="@+id/etAddItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -52,15 +52,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <EditText
-        android:id="@+id/etDate"
+        android:id="@+id/etAddPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="mm/dd/yyyy"
         android:inputType="date"
         app:layout_constraintBottom_toBottomOf="@+id/textView7"
-        app:layout_constraintEnd_toEndOf="@+id/etSaleName"
-        app:layout_constraintStart_toStartOf="@+id/etSaleName"
+        app:layout_constraintEnd_toEndOf="@+id/etAddItemName"
+        app:layout_constraintStart_toStartOf="@+id/etAddItemName"
         app:layout_constraintTop_toTopOf="@+id/textView7" />
 
     <TextView
@@ -75,14 +75,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <EditText
-        android:id="@+id/etAddress"
+        android:id="@+id/etAddItemDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="@+id/textView8"
-        app:layout_constraintEnd_toEndOf="@+id/etDate"
-        app:layout_constraintStart_toStartOf="@+id/etDate"
+        app:layout_constraintEnd_toEndOf="@+id/etAddPrice"
+        app:layout_constraintStart_toStartOf="@+id/etAddPrice"
         app:layout_constraintTop_toTopOf="@+id/textView8" />
 
     <TextView
@@ -135,23 +135,23 @@
         app:layout_constraintTop_toTopOf="@+id/textView10" />
 
     <Button
-        android:id="@+id/btnSave"
+        android:id="@+id/btnAddItemSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnCancel"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddItemCancel"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnCancel"
+        android:id="@+id/btnAddItemCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSave"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAddItemSave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnSave" />
+        app:layout_constraintStart_toEndOf="@+id/btnAddItemSave" />
 </androidx.constraintlayout.widget.ConstraintLayout>

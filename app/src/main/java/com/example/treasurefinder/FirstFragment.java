@@ -112,7 +112,7 @@ Boolean itemsFlag = true;
                         String name = saleItem.getString("name");
                         String price = saleItem.getString("price");
                         Double priceDbl = Double.parseDouble(price);
-                        String imgUrl = saleItem.getString("image");
+//                        String imgUrl = saleItem.getString("image");
                         String description = saleItem.getString("description");
                         for(int x=0;x<itemInfoData.length;x++){
                             if(ID.equals(itemInfoData[x])){
