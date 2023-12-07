@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -30,6 +31,10 @@ public class NotificationService extends Service {
     //Debug tag
     public static final String TAG = "NotifServiceTag";
 
+    SharedPreferences sharedPref;
+
+    String id = "";
+
     //Socket used for communicating with the server
     private Socket mSocket;
     {
@@ -41,6 +46,18 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        //Create a shared preference to pass userID between views
+        sharedPref = this.getSharedPreferences("user", Context.MODE_PRIVATE);
+
+        if(sharedPref.contains("id")) {
+
+            String s = sharedPref.getString("id", "0");
+
+            if(s.equals("0") == false) {
+                id = s;
+            }
+        }
 
         // Create a notification for running in the foreground
         Notification foregroundNotification = createForegroundNotification();
@@ -59,6 +76,52 @@ public class NotificationService extends Service {
             Notification notification = new NotificationCompat.Builder(NotificationService.this,CHANNEL_ID)
                     .setSmallIcon(android.R.drawable.star_big_on)
                     .setContentTitle("New garage sale near you!")
+                    .setContentText("Tap to open App")
+                    .setContentIntent(setOnTapAction())
+                    .setDeleteIntent(setOnDismissAction())
+                    .build();
+
+            //Instantiate an instance of notification manager
+            NotificationManager manager = getSystemService(NotificationManager.class);
+
+            //Send the notification to the phone
+            manager.notify(NOTIFICATION_ID,notification);
+        });
+
+        //Creates a "Listener" for the socket
+        //(When the client socket recieves the message "newItemRequest" from server it will run function fn)
+        mSocket.on("newItemRequest_" + id, fn ->{
+
+            //Debug
+            Log.d(TAG, "New Item Request from server");
+
+            //Create a notification
+            Notification notification = new NotificationCompat.Builder(NotificationService.this,CHANNEL_ID)
+                    .setSmallIcon(android.R.drawable.star_big_on)
+                    .setContentTitle("A User Has Requested Your Item!")
+                    .setContentText("Tap to open App")
+                    .setContentIntent(setOnTapAction())
+                    .setDeleteIntent(setOnDismissAction())
+                    .build();
+
+            //Instantiate an instance of notification manager
+            NotificationManager manager = getSystemService(NotificationManager.class);
+
+            //Send the notification to the phone
+            manager.notify(NOTIFICATION_ID,notification);
+        });
+
+        //Creates a "Listener" for the socket
+        //(When the client socket recieves the message "deleteRequest" from server it will run function fn)
+        mSocket.on("deleteRequest_"+id, fn ->{
+
+            //Debug
+            Log.d(TAG, "New Requested Item Sold from server");
+
+            //Create a notification
+            Notification notification = new NotificationCompat.Builder(NotificationService.this,CHANNEL_ID)
+                    .setSmallIcon(android.R.drawable.star_big_on)
+                    .setContentTitle("An Item You Requested Has Been Sold!")
                     .setContentText("Tap to open App")
                     .setContentIntent(setOnTapAction())
                     .setDeleteIntent(setOnDismissAction())
@@ -142,7 +205,7 @@ public class NotificationService extends Service {
         //creates new intent filter for dismissing a notification
         IntentFilter filter = new IntentFilter("dismiss_broadcast");
 
-        //register dissmissReceiver so pending intent can be closed
+        //register dismissReceiver so pending intent can be closed
         registerReceiver(receiver,filter);
 
         //Attempts to connect client socket to server socket
