@@ -41,7 +41,7 @@ public class AddNewSale extends AppCompatActivity {
         etEndTime = findViewById(R.id.etEndTime);
 
         queue = Volley.newRequestQueue(this.getApplicationContext());
-
+        //if canceled, return to profile page
         btnCancel.setOnClickListener(v->{
            Intent profileIntent = new Intent(AddNewSale.this, UserSales.class);
            startActivity(profileIntent);
@@ -58,25 +58,27 @@ public class AddNewSale extends AppCompatActivity {
             }
         });
     }
-
+    //add a new sale
     public void saveNewSale() throws JSONException, ParseException {
+        //get data
         String title = etSaleName.getText().toString();
         String address = etAddress.getText().toString();
         String startTime = etStartTime.getText().toString();
         String endTime = etEndTime.getText().toString();
         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date date = formatter.parse(etDate.getText().toString());
-
+        //check if all fields were filled
         if(etDate.getText().equals("") || title.equals("") || address.equals("") || startTime.equals("") || endTime.equals("")){
             Toast.makeText(this, "Please fill in each field. No fields can be left blank...", Toast.LENGTH_SHORT).show();
         }else{
+            //add each variable to a JSON object
             JSONObject j = new JSONObject();
             j.put("title", title);
             j.put("date", date);
             j.put("address", address);
             j.put("startTime", Integer.parseInt(startTime));
             j.put("endTime", Integer.parseInt(endTime));
-
+            //use the url to create the sale, using the result code to indicate it has returned from the result launcher
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
                 Toast.makeText(this, "Sale created successfully!", Toast.LENGTH_SHORT).show();
                 Intent it = new Intent();

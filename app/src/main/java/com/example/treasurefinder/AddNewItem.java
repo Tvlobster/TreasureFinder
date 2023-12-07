@@ -35,20 +35,23 @@ public class AddNewItem extends AppCompatActivity {
         btnSave = findViewById(R.id.btnAddItemSave);
 
         queue = Volley.newRequestQueue(this.getApplicationContext());
-
+        //button to add an item
         btnSave.setOnClickListener(e-> {
+            //check if all fields are filled
             if (etAddItemDescription.equals("") || etAddItemName.equals("") || etAddItemPrice.equals(""))
                 Toast.makeText(this, "Please fill in each field. No fields can be left blank...", Toast.LENGTH_SHORT).show();
             else {
+                //get sale id
                 Intent intent = this.getIntent();
                 String saleID = intent.getStringExtra("saleID");
                 JSONObject j = new JSONObject();
                 try {
+                    //add all variables to a JSON object
                     j.put("name", etAddItemName.getText());
                     j.put("description", etAddItemDescription.getText());
                     j.put("price", etAddItemPrice.getText());
                     j.put("saleId", saleID);
-
+                    //use the url to make the item, and finish with the result launcher code
                     JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
                         Toast.makeText(this, "Item created successfully!", Toast.LENGTH_SHORT).show();
                         Intent it = new Intent();
@@ -66,7 +69,7 @@ public class AddNewItem extends AppCompatActivity {
 
             }
         });
-
+        //if cancelled return to profile page
         btnCancel.setOnClickListener(e-> {
             finish();
         });

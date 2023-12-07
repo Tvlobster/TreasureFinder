@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -50,22 +51,21 @@ public class UserItemAdapter extends BaseAdapter {
         txtPrice.setText("$" + item.price);
         txtDescription.setText(item.description);
 
-//        btnDelete.setOnClickListener(e-> {
-//            adapterQueue = Volley.newRequestQueue(this.context.getApplicationContext());
-//            String URL = "https://treasurefinderbackend.onrender.com/seller/deleteItem";
-//
-//            JSONObject j = new JSONObject();
-//            URL += "/" + item.;
-//            items.remove(i);
-//            JsonObjectRequest r = new JsonObjectRequest(Request.Method.DELETE, URL, null, response -> {
-//                Log.d("Delete", response.toString());
-//                notifyDataSetChanged();
-//            }, error -> {
-//                Log.d("Delete", error.toString());
-//            });
-//            adapterQueue.add(r);
-//            notifyDataSetChanged();
-//        });
+        btnDelete.setOnClickListener(e-> {
+            adapterQueue = Volley.newRequestQueue(this.context.getApplicationContext());
+            String URL = "https://treasurefinderbackend.onrender.com/seller/deleteItem";
+            URL += "/" + item.id;
+            items.remove(i);
+            JsonObjectRequest r = new JsonObjectRequest(Request.Method.DELETE, URL, null, response -> {
+                Log.d("Delete", response.toString());
+                notifyDataSetChanged();
+            }, error -> {
+                Log.d("Delete", error.toString());
+            });
+            adapterQueue.add(r);
+            notifyDataSetChanged();
+
+        });
 
         return view;
     }
