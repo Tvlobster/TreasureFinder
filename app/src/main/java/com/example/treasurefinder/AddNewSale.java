@@ -135,8 +135,8 @@ public class AddNewSale extends AppCompatActivity {
             j.put("title", title);
             j.put("date", date);
             j.put("address", address);
-            j.put("startTime", Integer.parseInt(startTime));
-            j.put("endTime", Integer.parseInt(endTime));
+            j.put("startTime", startTime);
+            j.put("endTime", endTime);
             //use the url to create the sale, using the result code to indicate it has returned from the result launcher
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URL, j, response -> {
                 Toast.makeText(this, "Sale created successfully!", Toast.LENGTH_SHORT).show();
