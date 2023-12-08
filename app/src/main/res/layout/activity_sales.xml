@@ -77,12 +77,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.11" />
+        app:layout_constraintGuide_percent="0.15" />
 
     <ToggleButton
         android:id="@+id/tgView"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="ToggleButton"
@@ -92,7 +92,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.23000002" />
 
     <TextView
         android:id="@+id/textView4"
@@ -104,6 +105,45 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/lstSales"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002" />
+
+    <RadioGroup
+        android:id="@+id/rdgDistance"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/lstSales"
+        app:layout_constraintEnd_toStartOf="@+id/tgView"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+        <RadioButton
+            android:id="@+id/rdb30Miles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="30 Miles"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/rdb60Miles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="60 Miles"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/rdbAll"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:focusedByDefault="false"
+            android:text="All"
+            android:textSize="10sp" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

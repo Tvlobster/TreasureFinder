@@ -31,6 +31,8 @@ import android.widget.Button;
 
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,15 +70,19 @@ import java.util.List;
 public class SalesActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     GoogleMap map;
+    LatLng area;
     ToggleButton tgView;
     ListView lstSales;
 
     ArrayList<garageSale> sales;
+    ArrayList<garageSale> closeSales;
 
     SaleAdapter adapter;
     RequestQueue queue;
     Boolean locationFlag = true;
     Button btnSalesActivity, btnItemsActivity, btnProfileActivity;
+    RadioGroup rdgDistance;
+    RadioButton rdb30Miles, rdb60Miles, rdbAll;
 
     public static final String TAG = "NotifServiceTag";
 
@@ -94,6 +100,11 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         btnItemsActivity = findViewById(R.id.btnItemsActivity);
         btnSalesActivity = findViewById(R.id.btnSalesActivity);
         btnProfileActivity = findViewById(R.id.btnProfileActivity);
+        RadioGroup rdgDistance = findViewById(R.id.rdgDistance);
+        rdb30Miles = findViewById(R.id.rdb30Miles);
+        rdb60Miles = findViewById(R.id.rdb60Miles);
+        rdbAll = findViewById(R.id.rdbAll);
+
 
         //recieve the userID of the currently logged in user from main activity
         Intent loginIntent = getIntent();
@@ -123,6 +134,22 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
+        //create a check change listener for a radio group for miles radius in the list view
+        rdgDistance.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //call update list view and send the number of miles
+                if(checkedId == R.id.rdb30Miles){
+                    updateListView(30);
+                } else if (checkedId == R.id.rdb60Miles) {
+                    updateListView(60);
+                } else if (checkedId == R.id.rdbAll) {
+                    updateListView(0);
+                }
+
+            }
+        });
+
 
         //create a google map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -143,6 +170,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                             .commit();
                     //bring list into view
                     lstSales.setVisibility(View.VISIBLE);
+                    rdgDistance.setVisibility(View.VISIBLE);
 
                 } else {
                     //hide the list view and allow the map view to appear
@@ -152,6 +180,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                             .show(mapFragment)
                             .commit();
                     lstSales.setVisibility(View.INVISIBLE);
+                    rdgDistance.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -401,7 +430,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             if(location != null) {
                 Log.d(TAG, location.toString());
                 Geocoder geocoder = new Geocoder(SalesActivity.this);
-                LatLng area = new LatLng(location.getLatitude(), location.getLongitude());
+                 area = new LatLng(location.getLatitude(), location.getLongitude());
                 map.moveCamera(CameraUpdateFactory.newLatLng(area));
                 Log.d("Location", area.toString());
             }
@@ -422,8 +451,62 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         });
 
     }
+    //this method updates the list view to filter sales that are nearby in a 30 or 60 mile radius
+    public void updateListView(int miles) {
+        //initialize a new array list
+        closeSales = new ArrayList<>();
+
+        //if the all button was checked, set the adapter to view all sales
+        if (miles == 0) {
+            adapter = new SaleAdapter(this, sales);
+            lstSales.setAdapter(adapter);
+        }
+        else {
+            for (int i = 0; i < sales.size(); i++) {
+                //create a geocoder to geocode the address to laditiude and longitude values
+                Geocoder geocoder = new Geocoder(this);
+                //try to convert if the address is valid
+                try {
+                    List<Address> addresses = geocoder.getFromLocationName(
+                            sales.get(i).address, 1);
+                    Address firstAddress = addresses.get(0);
+                    double latitude = firstAddress.getLatitude();
+                    double longitude = firstAddress.getLongitude();
+                    Location targetLocation = new Location("target");
+                    targetLocation.setLatitude(latitude);
+                    targetLocation.setLongitude(longitude);
+                    Location currentLocation = new Location("current");
+                    currentLocation.setLongitude(area.longitude);
+                    currentLocation.setLatitude(area.latitude);
+
+                    // Calculate distance in meters
+                    float distance = currentLocation.distanceTo(targetLocation);
+
+                    // Convert mile radius to meters
+                    double mileRadiusInMeters = miles * 1609.34;
+
+                    if (distance <= mileRadiusInMeters) {
+                        closeSales.add(sales.get(i));
+                    }
 
 
+                } catch (Exception ex) {
+
+                }
+            }
+            //if there are close sales, update the adapter
+            if (closeSales != null) {
+                //update the adapter
+                adapter = new SaleAdapter(this, closeSales);
+                lstSales.setAdapter(adapter);
+            } else {
+                //if there arent any sales, keep the "all" displayes
+                Toast.makeText(getApplicationContext(), "No sales within this distance. See all sales", Toast.LENGTH_SHORT).show();
+                    rdbAll.setChecked(true);
+            }
+        }
+
+    }
 }
 
 
