@@ -5,18 +5,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
-
 import java.net.URISyntaxException;
-
 import io.socket.client.IO;
 import io.socket.client.Socket;
 
@@ -61,15 +56,8 @@ public class NotificationService extends Service {
         //if shared preference contains id tag
         if(sharedPref.contains("id")) {
 
-            //Create string for id
-            String s = sharedPref.getString("id", "0");
-
-            //If that string does not read 0
-            //(0 denotes user logged out)
-            if(s.equals("0") == false) {
-                //Set id to string
-                id = s;
-            }
+            //Set id to id contained in shared preference
+            id = sharedPref.getString("id", "0");
         }
 
         // Create a notification for running in the foreground
@@ -88,7 +76,7 @@ public class NotificationService extends Service {
             //Create a notification
             Notification notification = new NotificationCompat.Builder(NotificationService.this,CHANNEL_ID)
                     .setSmallIcon(android.R.drawable.star_big_on)
-                    .setContentTitle("New garage sale near you!")
+                    .setContentTitle("A User Has Posted A New garage Sale!")
                     .setContentText("Tap to open App")
                     .setContentIntent(setOnGarageTapAction())
                     .setDeleteIntent(setOnGarageDismissAction())
@@ -153,10 +141,12 @@ public class NotificationService extends Service {
     @Override
     public void onDestroy() {
 
-        //When onDestroy is triggered, shut down the socket and turn off the listener
+        //When onDestroy is triggered, shut down the socket and turn off the listeners
         super.onDestroy();
         mSocket.disconnect();
         mSocket.off("newGarageSale");
+        mSocket.off("newItemRequest_"+id);
+        mSocket.off("deleteRequest_"+id);
     }
 
     public PendingIntent setOnGarageTapAction(){
@@ -312,7 +302,7 @@ public class NotificationService extends Service {
 
 
     private Notification createForegroundNotification() {
-        // Create a notification channel if necessary
+        // Create a notification channel
         createNotificationChannel();
 
         // Create the notification

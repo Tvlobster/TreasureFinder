@@ -54,6 +54,7 @@ public class SignUp extends AppCompatActivity {
             Toast.makeText(this, "ERROR: PLEASE ENTER USERNAME, PASSWORD, AND PASSWORD CONFIRMATION", Toast.LENGTH_SHORT).show();
         }
 
+        //If not
         else {
 
             //Creates strings for username, password and password confirmation from the text in their respective text views
