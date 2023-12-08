@@ -5,7 +5,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,16 +25,6 @@ import org.json.JSONObject;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
-
-
-//for logging out we are going to need a method that contains this code
-
-//if (cookieManager.getCookieStore().getCookies().size() > 0) {
-//    cookieManager.getCookieStore().removeAll();
-//}
-
-
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,22 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Call checkPermissions method
         checkPermissions();
-
-//        //If statement checks to see if sharedPreference contains id tag
-//        if(sharedPref.contains("id")) {
-//
-//            //If so, create a new string using get string on the id tag in shared preference
-//            String s = sharedPref.getString("id", "0");
-//
-//            //Check to make sure that string does not read 0
-//            //(0 denotes id does not exist)
-//            if(s.equals("0") == false) {
-//
-//                //If string does not read 0, launch salesActivity intent
-//                Intent i = new Intent(this, SalesActivity.class);
-//                startActivity(i);
-//            }
-//        }
     }
 
     public void login(View v) throws JSONException {
@@ -140,12 +113,16 @@ public class MainActivity extends AppCompatActivity {
                         //set serverResponse to string held under id tag in server response
                         serverResponse = response.get("id").toString();
 
-                        //Create new intent for SalesActivity, put serverResponse in intent, launch intent
+                        //Create new intent for SalesActivity, put serverResponse in shared preferences, launch intent
                         Intent i = new Intent(this, SalesActivity.class);
 
+                        //puts id into shared preferences
                         prefEditor.putString("id", serverResponse);
+
+                        //Applies edit to shared preference
                         prefEditor.apply();
 
+                        //Launches SalesActivity
                         startActivity(i);
                     }
 
