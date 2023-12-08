@@ -141,7 +141,7 @@ public class NotificationService extends Service {
     @Override
     public void onDestroy() {
 
-        //When onDestroy is triggered, shut down the socket and turn off the listener
+        //When onDestroy is triggered, shut down the socket and turn off the listeners
         super.onDestroy();
         mSocket.disconnect();
         mSocket.off("newGarageSale");
