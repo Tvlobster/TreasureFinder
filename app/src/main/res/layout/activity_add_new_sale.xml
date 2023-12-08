@@ -58,6 +58,10 @@
         android:ems="10"
         android:hint="mm/dd/yyyy"
         android:inputType="date"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBottom_toBottomOf="@+id/textView7"
         app:layout_constraintEnd_toEndOf="@+id/etAddItemName"
         app:layout_constraintStart_toStartOf="@+id/etAddItemName"
@@ -116,6 +120,10 @@
         android:layout_height="50dp"
         android:ems="10"
         android:inputType="number"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBottom_toBottomOf="@+id/textView9"
         app:layout_constraintEnd_toStartOf="@+id/textView10"
         app:layout_constraintHorizontal_bias="0.5"
@@ -128,6 +136,10 @@
         android:layout_height="50dp"
         android:ems="10"
         android:inputType="number"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBottom_toBottomOf="@+id/textView10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -154,4 +166,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnAddItemSave" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

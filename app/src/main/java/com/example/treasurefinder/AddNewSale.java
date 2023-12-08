@@ -2,9 +2,12 @@ package com.example.treasurefinder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AddNewSale extends AppCompatActivity {
@@ -48,6 +52,59 @@ public class AddNewSale extends AppCompatActivity {
            finish();
         });
 
+        etDate.setOnClickListener(e->{
+
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            // Create a DatePickerDialog and show it
+            DatePickerDialog datePickerDialog = new DatePickerDialog(AddNewSale.this,
+                    (DatePickerDialog.OnDateSetListener) (view, year1, month1, dayOfMonth) -> {
+                etDate.setText(month1 + "/" + dayOfMonth + "/" + year1);
+                    }, year, month, day);
+            datePickerDialog.show();
+
+        });
+
+
+        etStartTime.setOnClickListener(e->{
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+            int minute = calendar.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewSale.this,(TimePickerDialog.OnTimeSetListener) (view, hour1,minute1) ->{
+                if (hour1 >12){
+                    etStartTime.setText(hour1-12 + ":" +minute1);
+                } else {
+                    etStartTime.setText(hour1 + ":" +minute1);
+                }
+            },hour,minute,false);
+            timePickerDialog.show();
+
+        });
+
+
+        etEndTime.setOnClickListener(e->{
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+            int minute = calendar.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewSale.this,(TimePickerDialog.OnTimeSetListener) (view, hour1,minute1) ->{
+
+                if (hour1 >12){
+                    etEndTime.setText(hour1-12 + ":" +minute1);
+                } else {
+                    etEndTime.setText(hour1 + ":" +minute1);
+                }
+
+            },hour,minute,false);
+            timePickerDialog.show();
+
+        });
         btnSave.setOnClickListener(v->{
             try {
                 saveNewSale();
