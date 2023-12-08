@@ -25,18 +25,22 @@ public class NotificationService extends Service {
     //String used to hold the channel ID for the notifications
     private static final String CHANNEL_ID = "Foreground Location Channel";
 
-    //Integer for the notificaton ID
+    //Integer for the new garage sale notification ID
     public static final int GARAGE_NOTIFICATION_ID = 1;
 
+    //Integer for the new request notification ID
     public static final int REQUEST_NOTIFICATION_ID = 2;
 
+    //Integer for the item sale notification ID
     public static final int SOLD_NOTIFICATION_ID = 3;
 
     //Debug tag
     public static final String TAG = "NotifServiceTag";
 
+    //Shared preference editor
     SharedPreferences sharedPref;
 
+    //clients id
     String id = "";
 
     //Socket used for communicating with the server
@@ -54,11 +58,16 @@ public class NotificationService extends Service {
         //Create a shared preference to pass userID between views
         sharedPref = this.getSharedPreferences("user", Context.MODE_PRIVATE);
 
+        //if shared preference contains id tag
         if(sharedPref.contains("id")) {
 
+            //Create string for id
             String s = sharedPref.getString("id", "0");
 
+            //If that string does not read 0
+            //(0 denotes user logged out)
             if(s.equals("0") == false) {
+                //Set id to string
                 id = s;
             }
         }
@@ -151,7 +160,7 @@ public class NotificationService extends Service {
     }
 
     public PendingIntent setOnGarageTapAction(){
-        //Pending intent setOnTapAction used to give the notification the ability to open to the main activity to log in when clicked
+        //Pending intent setOnGarageTapAction used to give the notification the ability to open to the main activity to log in when clicked
 
         //Create intent for the login page (MainActivity)
         Intent i = new Intent(this, MainActivity.class);
@@ -169,7 +178,7 @@ public class NotificationService extends Service {
     }
 
     public PendingIntent setOnGarageDismissAction(){
-        //Pending intent setOnDismissAction used to delete the pending intent
+        //Pending intent setOnGarageDismissAction used to delete the pending intent
 
         //Create intent with action to delete pending intent
         Intent i = new Intent("dismiss_broadcast");
@@ -188,7 +197,7 @@ public class NotificationService extends Service {
     }
 
     public PendingIntent setOnRequestTapAction(){
-        //Pending intent setOnTapAction used to give the notification the ability to open to the main activity to log in when clicked
+        //Pending intent setOnRequestTapAction used to give the notification the ability to open to the main activity to log in when clicked
 
         //Create intent for the login page (MainActivity)
         Intent i = new Intent(this, MainActivity.class);
@@ -206,7 +215,7 @@ public class NotificationService extends Service {
     }
 
     public PendingIntent setOnRequestDismissAction(){
-        //Pending intent setOnDismissAction used to delete the pending intent
+        //Pending intent setOnRequestDismissAction used to delete the pending intent
 
         //Create intent with action to delete pending intent
         Intent i = new Intent("dismiss_broadcast");
@@ -225,7 +234,7 @@ public class NotificationService extends Service {
     }
 
     public PendingIntent setOnSoldTapAction(){
-        //Pending intent setOnTapAction used to give the notification the ability to open to the main activity to log in when clicked
+        //Pending intent setOnSoldTapAction used to give the notification the ability to open to the main activity to log in when clicked
 
         //Create intent for the login page (MainActivity)
         Intent i = new Intent(this, MainActivity.class);
@@ -243,7 +252,7 @@ public class NotificationService extends Service {
     }
 
     public PendingIntent setOnSoldDismissAction(){
-        //Pending intent setOnDismissAction used to delete the pending intent
+        //Pending intent setOnSoldDismissAction used to delete the pending intent
 
         //Create intent with action to delete pending intent
         Intent i = new Intent("dismiss_broadcast");
@@ -278,15 +287,6 @@ public class NotificationService extends Service {
         //Calls method to create a notification channel
         createNotificationChannel();
 
-        //Creates a new dismiss receiver
-        DismissReceiver receiver = new DismissReceiver();
-
-        //creates new intent filter for dismissing a notification
-        IntentFilter filter = new IntentFilter("dismiss_broadcast");
-
-        //register dismissReceiver so pending intent can be closed
-        registerReceiver(receiver,filter);
-
         //Attempts to connect client socket to server socket
         mSocket.connect();
     }
@@ -310,17 +310,6 @@ public class NotificationService extends Service {
         Log.d(TAG, "Main Channel created");
     }
 
-    class DismissReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch(intent.getAction()){
-                case "dismiss_broadcast":
-                    Toast.makeText(context,"Notification was dismissed",Toast.LENGTH_LONG).show();
-                    break;
-            }
-        }
-    }
 
     private Notification createForegroundNotification() {
         // Create a notification channel if necessary
