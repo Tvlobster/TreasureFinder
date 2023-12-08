@@ -79,7 +79,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
     SaleAdapter adapter;
     RequestQueue queue;
-    Boolean locationFlag = true;
+    Boolean locationFlag;
     Button btnSalesActivity, btnItemsActivity, btnProfileActivity;
     RadioGroup rdgDistance;
     RadioButton rdb30Miles, rdb60Miles, rdbAll;
@@ -139,12 +139,18 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 //call update list view and send the number of miles
-                if(checkedId == R.id.rdb30Miles){
-                    updateListView(30);
-                } else if (checkedId == R.id.rdb60Miles) {
-                    updateListView(60);
-                } else if (checkedId == R.id.rdbAll) {
+                if(locationFlag == false){
+                    Toast.makeText(getApplicationContext(), "Location Access Denied. Showing all sales", Toast.LENGTH_SHORT).show();
+                    rdbAll.setChecked(true);
                     updateListView(0);
+                } else {
+                    if(checkedId == R.id.rdb30Miles){
+                        updateListView(30);
+                    } else if (checkedId == R.id.rdb60Miles) {
+                        updateListView(60);
+                    } else if (checkedId == R.id.rdbAll) {
+                        updateListView(0);
+                    }
                 }
 
             }
@@ -406,7 +412,8 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                     //for now move the camera to the area of the sale
                     LatLng area = new LatLng(latitude, longitude);
                     map.moveCamera(CameraUpdateFactory.newLatLng(area));
-                    locationFlag = true;
+                Toast.makeText(getApplicationContext(), "Location Access Denied. Browse map to find sales.", Toast.LENGTH_SHORT).show();
+
 
                 }
             catch (Exception ex){
