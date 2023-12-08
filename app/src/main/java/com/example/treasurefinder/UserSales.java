@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,7 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class UserSales extends AppCompatActivity {
-    TextView txtWelcome;
+    TextView txtWelcome, txtNoSales;
     ArrayList<garageSale> sales;
     UserSaleAdapter adapter;
     Button btnViewSales, btnViewItems, btnMyProfile, btnAddSale, btnLogout;
@@ -46,6 +47,7 @@ public class UserSales extends AppCompatActivity {
         lstMySales = findViewById(R.id.lstUserItems);
         txtWelcome = findViewById(R.id.txtWelcome);
         btnLogout = findViewById(R.id.btnLogout);
+        txtNoSales = findViewById(R.id.txtNoSales);
 
         //launch activities for nav bar
         btnViewSales.setOnClickListener(v->{
@@ -68,6 +70,7 @@ public class UserSales extends AppCompatActivity {
             Log.d("result", "Activity finished");
             //get update on return and refresh adapter
             getSales();
+
             adapter = new UserSaleAdapter(sales, this.getApplicationContext());
             lstMySales.setAdapter(adapter);
         });
@@ -130,6 +133,10 @@ public class UserSales extends AppCompatActivity {
                     sales.add(userSale);
                     adapter.notifyDataSetChanged();
                 }
+                if(sales.isEmpty())
+                    txtNoSales.setVisibility(View.VISIBLE);
+                else
+                    txtNoSales.setVisibility(View.INVISIBLE);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }

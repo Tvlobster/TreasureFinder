@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class UserItemAdapter extends BaseAdapter {
@@ -41,6 +42,7 @@ public class UserItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup parent) {
+        DecimalFormat df = new DecimalFormat("0.00");
         view = LayoutInflater.from(context).inflate(R.layout.your_sale_items_layout, parent, false);
         Item item = items.get(i);
         TextView txtItemName = view.findViewById(R.id.txtYourSaleItem);
@@ -48,7 +50,7 @@ public class UserItemAdapter extends BaseAdapter {
         TextView txtDescription = view.findViewById(R.id.txtYourItemDescription);
         Button btnDelete = view.findViewById(R.id.btnYourItemDelete);
         txtItemName.setText(item.name);
-        txtPrice.setText("$" + item.price);
+        txtPrice.setText("$" + df.format(item.price));
         txtDescription.setText(item.description);
 
         btnDelete.setOnClickListener(e-> {
@@ -59,6 +61,11 @@ public class UserItemAdapter extends BaseAdapter {
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.DELETE, URL, null, response -> {
                 Log.d("Delete", response.toString());
                 notifyDataSetChanged();
+                TextView txtNoSales = parent.getRootView().findViewById(R.id.txtNoItems);
+                if(items.isEmpty())
+                    txtNoSales.setVisibility(View.VISIBLE);
+                else
+                    txtNoSales.setVisibility(View.INVISIBLE);
             }, error -> {
                 Log.d("Delete", error.toString());
             });

@@ -63,9 +63,15 @@ public class UserSaleAdapter extends BaseAdapter {
             //add TUID to url to delete correct sale
             URL += "/" + sale.TUID;
             sales.remove(i);
+
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.DELETE, URL, null, response -> {
                 Log.d("Delete", response.toString());
                 notifyDataSetChanged();
+                TextView txtNoSales = parent.getRootView().findViewById(R.id.txtNoSales);
+                if(sales.isEmpty())
+                    txtNoSales.setVisibility(View.VISIBLE);
+                else
+                    txtNoSales.setVisibility(View.INVISIBLE);
             }, error -> {
                 Log.d("Delete", error.toString());
             });

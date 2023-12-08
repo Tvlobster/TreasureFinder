@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,6 +28,7 @@ public class UserItems extends AppCompatActivity {
     Button btnViewSales, btnViewItems, btnMyProfile, btnAddItems;
     ListView lstItems;
     ArrayList<Item> items;
+    TextView txtNoItems;
     String saleID;
     RequestQueue queue;
     String URL = "https://treasurefinderbackend.onrender.com/user/items";
@@ -48,6 +51,7 @@ public class UserItems extends AppCompatActivity {
         btnMyProfile = findViewById(R.id.btnMyProfile);
         btnViewItems = findViewById(R.id.btnViewItems);
         btnAddItems = findViewById(R.id.btnAddItems);
+        txtNoItems = findViewById(R.id.txtNoItems);
         lstItems = findViewById(R.id.lstUserItems);
         //get items and add adapter to list view
         getItems();
@@ -114,6 +118,10 @@ public class UserItems extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 }
+                if(items.isEmpty())
+                    txtNoItems.setVisibility(View.VISIBLE);
+                else
+                    txtNoItems.setVisibility(View.INVISIBLE);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }

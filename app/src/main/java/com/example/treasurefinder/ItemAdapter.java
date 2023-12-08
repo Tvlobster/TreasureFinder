@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ItemAdapter extends BaseAdapter  {
@@ -44,6 +45,7 @@ public class ItemAdapter extends BaseAdapter  {
 
     @Override
     public View getView(int i, View view, ViewGroup parent) {
+        DecimalFormat df = new DecimalFormat("0.00");
         view = LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false);
         //get the item object that was selected
         Item item = items.get(i);
@@ -53,7 +55,7 @@ public class ItemAdapter extends BaseAdapter  {
         TextView txtDescription = view.findViewById(R.id.txtDescription);
         Button btnRequest = view.findViewById(R.id.btnRequest);
         txtItemName.setText(item.name);
-        txtPrice.setText("$" + item.price);
+        txtPrice.setText("$" + df.format(item.price));
         txtDescription.setText(item.description);
         context = context.getApplicationContext();
 
