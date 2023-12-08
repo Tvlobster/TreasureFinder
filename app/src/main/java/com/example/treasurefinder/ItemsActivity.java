@@ -41,7 +41,7 @@ public class ItemsActivity extends AppCompatActivity {
         btnViewItems = findViewById(R.id.btnItemsActivity4);
         btnViewSales = findViewById(R.id.btnSalesActivity3);
         btnMyProfile = findViewById(R.id.btnProfileActivity3);
-
+        //get items, set adapter and show in list view
         try {
             getItems();
         } catch (JSONException e) {
@@ -50,7 +50,7 @@ public class ItemsActivity extends AppCompatActivity {
 
         adapter = new ItemAdapter(items, this);
         lstItems.setAdapter(adapter);
-
+        //buttons for nav bar to launch different activity
         btnViewSales.setOnClickListener(v->{
             Intent salesIntent = new Intent(ItemsActivity.this, SalesActivity.class);
             salesIntent.putExtra("userID", userID);
@@ -64,22 +64,26 @@ public class ItemsActivity extends AppCompatActivity {
         });
 
     }
-
+    //get all items not from the user
     public void getItems() throws JSONException {
+        //get user ID
         Intent intent = this.getIntent();
         userID = intent.getStringExtra("userID");
         queue = Volley.newRequestQueue(this.getApplicationContext());
-
+        //get url for all items
         JSONObject j = new JSONObject();
-
         JsonObjectRequest r = new JsonObjectRequest(Request.Method.GET, URL, j, response -> {
             try{
                 JSONArray listOfItems = response.getJSONArray("listOfItems");
+                //for each item
                 for(int i=0;i<listOfItems.length();i++){
                     JSONObject item = (JSONObject) listOfItems.get(i);
+                    //check if item matches the current user
                     if(!item.getString("owner").equals(userID)){
+                        //if not belonging to the user, create an item object and add to array list
                         Item newItem = new Item(item.getString("name"), item.getDouble("price"), item.getString("description"), item.getString("_id"));
                         items.add(newItem);
+                        //notify that item was added
                         adapter.notifyDataSetChanged();
                     }
                     Log.d("Item", item.toString());

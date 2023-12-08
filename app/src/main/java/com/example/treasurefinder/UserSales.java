@@ -113,7 +113,7 @@ public class UserSales extends AppCompatActivity {
                 JSONObject user = (JSONObject) response.get("users");
                 JSONArray jsonSales = user.getJSONArray("GarageSale");
                 for(int i=0; i<jsonSales.length(); i++) {
-                    //create sale object and add to array list
+                    //get all variables for sale
                     Log.d("Sale", jsonSales.get(i).toString());
                     JSONObject sale = (JSONObject) jsonSales.get(i);
                     String title = sale.getString("title");
@@ -125,10 +125,12 @@ public class UserSales extends AppCompatActivity {
                     String hours = startTime + "-" + endTime;
                     String tuid = sale.getString("_id");
                     JSONArray items = sale.getJSONArray("items");
+                    //add item string to array
                     String[] itemsArr = new String[items.length()];
                     for(int k=0; k<itemsArr.length; k++) {
                         itemsArr[k] = items.get(k).toString();
                     }
+                    //create sale object and add to array
                     garageSale userSale = new garageSale(title, address, owner, date, hours, tuid, itemsArr);
                     sales.add(userSale);
                     adapter.notifyDataSetChanged();
@@ -143,6 +145,7 @@ public class UserSales extends AppCompatActivity {
         }, error -> {
             Log.d("Sales", error.toString());
         });
+        //add to queue
         queue.add(r);
     }
 }

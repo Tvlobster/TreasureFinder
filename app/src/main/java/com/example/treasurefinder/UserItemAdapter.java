@@ -42,9 +42,11 @@ public class UserItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup parent) {
+        //format price to 2 decimal places
         DecimalFormat df = new DecimalFormat("0.00");
         view = LayoutInflater.from(context).inflate(R.layout.your_sale_items_layout, parent, false);
         Item item = items.get(i);
+        //get views and set values
         TextView txtItemName = view.findViewById(R.id.txtYourSaleItem);
         TextView txtPrice = view.findViewById(R.id.txtYourItemPrice);
         TextView txtDescription = view.findViewById(R.id.txtYourItemDescription);
@@ -52,13 +54,15 @@ public class UserItemAdapter extends BaseAdapter {
         txtItemName.setText(item.name);
         txtPrice.setText("$" + df.format(item.price));
         txtDescription.setText(item.description);
-
+        //delete button
         btnDelete.setOnClickListener(e-> {
+            //launch delete url and remove item from array list
             adapterQueue = Volley.newRequestQueue(this.context.getApplicationContext());
             String URL = "https://treasurefinderbackend.onrender.com/seller/deleteItem";
             URL += "/" + item.id;
             items.remove(i);
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.DELETE, URL, null, response -> {
+                //check if any sales remain, and display text view indicating no sales are present if necessary
                 Log.d("Delete", response.toString());
                 notifyDataSetChanged();
                 TextView txtNoSales = parent.getRootView().findViewById(R.id.txtNoItems);
@@ -76,7 +80,7 @@ public class UserItemAdapter extends BaseAdapter {
 
         return view;
     }
-
+    //constructor for adapter
     public UserItemAdapter(ArrayList<Item> items, Context context) {
         this.items = items;
         this.context = context;

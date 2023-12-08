@@ -118,6 +118,7 @@ public class UserItems extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 }
+                //check if items array is empty, and show text view indicating no items if necessary
                 if(items.isEmpty())
                     txtNoItems.setVisibility(View.VISIBLE);
                 else
