@@ -38,7 +38,7 @@ public class AddNewItem extends AppCompatActivity {
         //button to add an item
         btnSave.setOnClickListener(e-> {
             //check if all fields are filled
-            if (etAddItemDescription.equals("") || etAddItemName.equals("") || etAddItemPrice.equals(""))
+            if (etAddItemDescription.getText().toString().equals("") || etAddItemName.getText().toString().equals("") || etAddItemPrice.getText().toString().equals(""))
                 Toast.makeText(this, "Please fill in each field. No fields can be left blank...", Toast.LENGTH_SHORT).show();
             else {
                 //get sale id

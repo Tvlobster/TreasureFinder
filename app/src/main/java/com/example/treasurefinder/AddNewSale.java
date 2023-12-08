@@ -84,8 +84,11 @@ public class AddNewSale extends AppCompatActivity {
             int minute = calendar.get(Calendar.MINUTE);
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewSale.this,(TimePickerDialog.OnTimeSetListener) (view, hour1,minute1) ->{
-                Time t = new Time(hour1,minute1,0);
-                etStartTime.setText(t.toString());
+
+                    Time t = new Time(hour1,minute1,0);
+                    etStartTime.setText(t.toString());
+
+
             },hour,minute,false);
             timePickerDialog.show();
 
@@ -100,8 +103,8 @@ public class AddNewSale extends AppCompatActivity {
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewSale.this,(TimePickerDialog.OnTimeSetListener) (view, hour1,minute1) ->{
 
-                Time t = new Time(hour1,minute1,0);
-                etEndTime.setText(t.toString());
+                    Time t = new Time(hour1, minute1, 0);
+                    etEndTime.setText(t.toString());
 
             },hour,minute,false);
             timePickerDialog.show();
@@ -124,12 +127,14 @@ public class AddNewSale extends AppCompatActivity {
         String address = etAddress.getText().toString();
         String startTime = etStartTime.getText().toString();
         String endTime = etEndTime.getText().toString();
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        Date date = formatter.parse(etDate.getText().toString());
         //check if all fields were filled
         if(etDate.getText().equals("") || title.equals("") || address.equals("") || startTime.equals("") || endTime.equals("")){
             Toast.makeText(this, "Please fill in each field. No fields can be left blank...", Toast.LENGTH_SHORT).show();
         }else{
+
+            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = formatter.parse(etDate.getText().toString());
+
             //add each variable to a JSON object
             JSONObject j = new JSONObject();
             j.put("title", title);

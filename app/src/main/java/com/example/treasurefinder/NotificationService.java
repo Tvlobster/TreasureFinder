@@ -117,6 +117,7 @@ public class NotificationService extends Service {
 
         //Creates a "Listener" for the socket
         //(When the client socket recieves the message "deleteRequest" from server it will run function fn)
+        Log.d(TAG, id);
         mSocket.on("deleteRequest_"+id, fn ->{
 
             //Debug

@@ -79,10 +79,10 @@ Boolean itemsFlag = true;
             //if they do, display them
         else{
             itemInfoData = itemInfoString.split(";");
-            Log.d("TEST," ,itemInfoString);
-            Log.d("TESTITEMS", itemInfoData[0]);
-            Log.d("TESTITEMS", itemInfoData[1]);
-            Log.d("TESTITEMS", itemInfoData[2]);
+//            Log.d("TEST," ,itemInfoString);
+//            Log.d("TESTITEMS", itemInfoData[0]);
+//            Log.d("TESTITEMS", itemInfoData[1]);
+//            Log.d("TESTITEMS", itemInfoData[2]);
 
             //call the method to make a JSON request to get item details
             // requestItemInfo();
