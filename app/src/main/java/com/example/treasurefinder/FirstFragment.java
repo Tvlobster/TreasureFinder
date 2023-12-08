@@ -92,7 +92,7 @@ Boolean itemsFlag = true;
             //url to the server
             String url = "https://treasurefinderbackend.onrender.com/items";
             //create a new request queue
-            queue = Volley.newRequestQueue(this.getContext());
+            queue = Volley.newRequestQueue(this.getContext().getApplicationContext());
 
             //create a JSON object to use for the request
             JSONObject j = new JSONObject();

@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
 
-        queue = Volley.newRequestQueue(this);
+        queue = Volley.newRequestQueue(this.getApplicationContext());
     }
 
     public void login() throws JSONException {

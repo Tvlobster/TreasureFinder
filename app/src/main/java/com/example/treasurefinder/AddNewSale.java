@@ -15,15 +15,22 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class AddNewSale extends AppCompatActivity {
     Button btnSave, btnCancel;
@@ -52,6 +59,7 @@ public class AddNewSale extends AppCompatActivity {
            finish();
         });
 
+
         etDate.setOnClickListener(e->{
 
             Calendar calendar = Calendar.getInstance();
@@ -76,11 +84,8 @@ public class AddNewSale extends AppCompatActivity {
             int minute = calendar.get(Calendar.MINUTE);
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewSale.this,(TimePickerDialog.OnTimeSetListener) (view, hour1,minute1) ->{
-                if (hour1 >12){
-                    etStartTime.setText(hour1-12 + ":" +minute1);
-                } else {
-                    etStartTime.setText(hour1 + ":" +minute1);
-                }
+                Time t = new Time(hour1,minute1,0);
+                etStartTime.setText(t.toString());
             },hour,minute,false);
             timePickerDialog.show();
 
@@ -95,11 +100,8 @@ public class AddNewSale extends AppCompatActivity {
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewSale.this,(TimePickerDialog.OnTimeSetListener) (view, hour1,minute1) ->{
 
-                if (hour1 >12){
-                    etEndTime.setText(hour1-12 + ":" +minute1);
-                } else {
-                    etEndTime.setText(hour1 + ":" +minute1);
-                }
+                Time t = new Time(hour1,minute1,0);
+                etEndTime.setText(t.toString());
 
             },hour,minute,false);
             timePickerDialog.show();

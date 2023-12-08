@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -63,7 +64,7 @@ public class ItemAdapter extends BaseAdapter  {
                 //url to the server
                 String url = "https://treasurefinderbackend.onrender.com/request/new/"+item.id;
                 //create a new request queue
-                queue = Volley.newRequestQueue(context);
+                queue = Volley.newRequestQueue(context.getApplicationContext());
 
                 //create a JSON object to use for the request
                 JSONObject j = new JSONObject();
@@ -75,6 +76,9 @@ public class ItemAdapter extends BaseAdapter  {
                         //extract the object and array from the response
                         JSONObject myObject = new JSONObject(jsonResponse);
 
+                        if (myObject.has("Error")){
+                            Toast.makeText(context,"This item has already been requested",Toast.LENGTH_SHORT).show();
+                        }
 
 
                     } catch (JSONException e) {

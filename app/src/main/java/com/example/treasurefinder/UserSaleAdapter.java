@@ -56,7 +56,7 @@ public class UserSaleAdapter extends BaseAdapter {
         //delete button
         btnDelete.setOnClickListener(e-> {
             //launch delete request from url
-            adapterQueue = Volley.newRequestQueue(this.context.getApplicationContext());
+            adapterQueue = Volley.newRequestQueue(context.getApplicationContext());
             String URL = "https://treasurefinderbackend.onrender.com/seller/deleteGarageSale";
 
             JSONObject j = new JSONObject();

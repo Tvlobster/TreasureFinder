@@ -92,21 +92,21 @@ public class MainActivity extends AppCompatActivity {
         //Call checkPermissions method
         checkPermissions();
 
-        //If statement checks to see if sharedPreference contains id tag
-        if(sharedPref.contains("id")) {
-
-            //If so, create a new string using get string on the id tag in shared preference
-            String s = sharedPref.getString("id", "0");
-
-            //Check to make sure that string does not read 0
-            //(0 denotes id does not exist)
-            if(s.equals("0") == false) {
-
-                //If string does not read 0, launch salesActivity intent
-                Intent i = new Intent(this, SalesActivity.class);
-                startActivity(i);
-            }
-        }
+//        //If statement checks to see if sharedPreference contains id tag
+//        if(sharedPref.contains("id")) {
+//
+//            //If so, create a new string using get string on the id tag in shared preference
+//            String s = sharedPref.getString("id", "0");
+//
+//            //Check to make sure that string does not read 0
+//            //(0 denotes id does not exist)
+//            if(s.equals("0") == false) {
+//
+//                //If string does not read 0, launch salesActivity intent
+//                Intent i = new Intent(this, SalesActivity.class);
+//                startActivity(i);
+//            }
+//        }
     }
 
     public void login(View v) throws JSONException {
