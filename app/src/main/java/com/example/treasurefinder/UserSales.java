@@ -85,7 +85,7 @@ public class UserSales extends AppCompatActivity {
         btnLogout.setOnClickListener(e-> {
             String URLlogout = "https://treasurefinderbackend.onrender.com/users/logout";
             //launch login activity and post for logout
-            Intent logout = new Intent(UserSales.this, Login.class);
+            Intent logout = new Intent(UserSales.this, MainActivity.class);
             JsonObjectRequest r = new JsonObjectRequest(Request.Method.POST, URLlogout, null, response -> {
                 Log.d("Logout", "Successfully logged out");
             },error -> {});
