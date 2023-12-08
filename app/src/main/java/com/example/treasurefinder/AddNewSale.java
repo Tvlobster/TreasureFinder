@@ -42,6 +42,7 @@ public class AddNewSale extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_sale);
 
+        //get references to the controls
         btnSave = findViewById(R.id.btnAddItemSave);
         btnCancel = findViewById(R.id.btnAddItemCancel);
 
@@ -51,7 +52,9 @@ public class AddNewSale extends AppCompatActivity {
         etStartTime = findViewById(R.id.etStartTime);
         etEndTime = findViewById(R.id.etEndTime);
 
+        //create a new request queue
         queue = Volley.newRequestQueue(this.getApplicationContext());
+
         //if canceled, return to profile page
         btnCancel.setOnClickListener(v->{
            Intent profileIntent = new Intent(AddNewSale.this, UserSales.class);
@@ -59,7 +62,7 @@ public class AddNewSale extends AppCompatActivity {
            finish();
         });
 
-
+        //allows the user to select a date using the datePicker
         etDate.setOnClickListener(e->{
 
             Calendar calendar = Calendar.getInstance();
@@ -76,7 +79,7 @@ public class AddNewSale extends AppCompatActivity {
 
         });
 
-
+        //allows the user to select a start time using the timePicker
         etStartTime.setOnClickListener(e->{
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -94,7 +97,7 @@ public class AddNewSale extends AppCompatActivity {
 
         });
 
-
+        //allows the user to select an end time using the timePicker
         etEndTime.setOnClickListener(e->{
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -108,8 +111,9 @@ public class AddNewSale extends AppCompatActivity {
 
             },hour,minute,false);
             timePickerDialog.show();
-
         });
+
+        //if data is added correctly, will send a save sale request to the server which will save it to the DB
         btnSave.setOnClickListener(v->{
             try {
                 saveNewSale();
@@ -120,7 +124,8 @@ public class AddNewSale extends AppCompatActivity {
             }
         });
     }
-    //add a new sale
+
+    //send a save sale request to the server to then update the DB with the new sale
     public void saveNewSale() throws JSONException, ParseException {
         //get data
         String title = etSaleName.getText().toString();
@@ -131,7 +136,7 @@ public class AddNewSale extends AppCompatActivity {
         if(etDate.getText().equals("") || title.equals("") || address.equals("") || startTime.equals("") || endTime.equals("")){
             Toast.makeText(this, "Please fill in each field. No fields can be left blank...", Toast.LENGTH_SHORT).show();
         }else{
-
+            //get the date from the editText into the correct format
             DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             Date date = formatter.parse(etDate.getText().toString());
 
