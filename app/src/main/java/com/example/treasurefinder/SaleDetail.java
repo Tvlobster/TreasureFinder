@@ -32,7 +32,7 @@ public class SaleDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //created by the basic views activity
         binding = ActivitySaleDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -42,6 +42,7 @@ public class SaleDetail extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        //recieve the sale title for display on the nav bar
         Intent saleInfoIntent = getIntent();
         title = saleInfoIntent.getStringExtra("title");
         getSupportActionBar().setTitle(title);
@@ -58,6 +59,7 @@ public class SaleDetail extends AppCompatActivity {
         });
     }
 
+    //created by views activity
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_sale_detail);
@@ -65,13 +67,16 @@ public class SaleDetail extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+    //create public "getter" methods that can be called by first fragment to recieve data from this intent
     public String getSaleInfo(){
+        //get the selected sale information from sales activity and concentenate to send one string to first fragment
         Intent i = getIntent();
         String hoursOperation = "Open on: "+i.getStringExtra("date")+" from "+ i.getStringExtra("hours");
         String information = title+";"+i.getStringExtra("address")+";"+i.getStringExtra("owner")+";"+hoursOperation;
         return information;
     }
-    //this is to concantenate all item ID's that a sale owns
+    //this is to concantenate all item ID's that a sale owns into a string to send to first fragment
     public String getItemInfo(){
         Intent i = getIntent();
            String[] saleItems = i.getStringArrayExtra("items");
@@ -82,7 +87,6 @@ public class SaleDetail extends AppCompatActivity {
            Log.d("TEST", itemsString);
 
            return itemsString;
-
 
     }
 
