@@ -88,6 +88,7 @@ public class UserSales extends AppCompatActivity {
             },error -> {});
             queue.add(r);
             startActivity(logout);
+            finish();
         });
 
         getSales();
