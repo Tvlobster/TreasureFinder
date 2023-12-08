@@ -79,7 +79,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
     SaleAdapter adapter;
     RequestQueue queue;
-    Boolean locationFlag;
+    Boolean locationFlag = true;
     Button btnSalesActivity, btnItemsActivity, btnProfileActivity;
     RadioGroup rdgDistance;
     RadioButton rdb30Miles, rdb60Miles, rdbAll;
