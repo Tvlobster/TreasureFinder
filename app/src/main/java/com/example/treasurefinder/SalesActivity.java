@@ -77,32 +77,27 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
     RequestQueue queue;
     Boolean locationFlag = true;
     Button btnSalesActivity, btnItemsActivity, btnProfileActivity;
-    public static final int LOCATION_REQUEST_CODE = 111;
 
     public static final String TAG = "NotifServiceTag";
 
     public static final int NOTIFICATION_REQUEST_CODE = 1;
 
 
-    SeekBar seekRange;
-    TextView txtRange;
-
-    String url = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales);
+        //initialize views
         tgView = findViewById(R.id.tgView);
         lstSales = findViewById(R.id.lstSales);
         btnItemsActivity = findViewById(R.id.btnItemsActivity);
         btnSalesActivity = findViewById(R.id.btnSalesActivity);
         btnProfileActivity = findViewById(R.id.btnProfileActivity);
 
+        //recieve the userID of the currently logged in user from main activity
         Intent loginIntent = getIntent();
         String userID = loginIntent.getStringExtra("ID");
-
 
 
         //instantiate a new arrayList of garage sales
@@ -112,6 +107,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         btnItemsActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //send userID to other activities
                 Intent itemsIntent = new Intent(SalesActivity.this, ItemsActivity.class);
                 itemsIntent.putExtra("userID", userID);
                 startActivity(itemsIntent);
@@ -120,20 +116,13 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         btnProfileActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //send userID to to other activities using a button
                 Intent profileIntent = new Intent(SalesActivity.this, UserSales.class);
                 profileIntent.putExtra("userID", userID);
                 startActivity(profileIntent);
             }
         });
 
-        //create a listener to open the detail intent when a user clicks on a specific sale
-        lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SalesActivity.this, SaleDetail.class);
-                startActivity(intent); //launch intent to see more sale details
-            }
-        });
 
         //create a google map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -167,27 +156,19 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-
-
+        //create an intent for the notification service to begin
         Intent i = new Intent(this, NotificationService.class);
         startForegroundService(i);
-     //  getLastLocation();
-      //  getCurrentLocation();
 
         lstSales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // 'position' parameter gives you the index of the item clicked
-                // Perform actions based on the clicked item, for example:
-
-                // Get the clicked item from the adapter
+                //cast the object as a garagesale object to get the data attributes
                 garageSale clickedItem = (garageSale) parent.getItemAtPosition(position);
 
-                // Handle the click, such as displaying a toast with the clicked item text
+                //if an item is clicked
                 if (clickedItem != null) {
                     String text = clickedItem.toString();
-                    Log.d("TAG", "Clicked: " + text);
-
 
                     //Create a new intent to open up a page with the sale details
                     Intent intent = new Intent(SalesActivity.this, SaleDetail.class);
@@ -205,22 +186,17 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-
     }
 
-
-    //all logic to establish the map and markers and server request
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+
         map = googleMap;
         map.setInfoWindowAdapter(new garageSaleInfoWindow());
-        //when map is ready, call to get server info. This method calls add markers
+        //when map is ready, call to get the user's current location and move the camera to that location
         getCurrentLocation();
+        //Next, request info from the server to place markers on the map
         requestInfo();
-
-
-
-
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -236,14 +212,16 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
+        //on click listener for the info window preview of a garage sale
+        //when a user clicks on the window, open up a new detail page about the sale
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(@NonNull Marker marker) {
-
+                //get tag marker object
                 garageSale sale = (garageSale) marker.getTag();
 
 
-                //Create a new intent to open up a page with the sale details
+                //Create a new intent to open up a page and pass in the sale details
                 Intent intent = new Intent(SalesActivity.this, SaleDetail.class);
                 intent.putExtra("title", sale.title);
                 intent.putExtra("address", sale.address);
@@ -260,7 +238,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
-    //code to
+    //code to create the info window preview
     class garageSaleInfoWindow implements GoogleMap.InfoWindowAdapter {
 
         @Nullable
@@ -273,6 +251,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         @Override
         public View getInfoWindow(@NonNull Marker marker) {
             View v = LayoutInflater.from(SalesActivity.this).inflate(R.layout.layout_customwindow, null);
+            //initialize the views on the info window and populate the data
             TextView txtTitle = v.findViewById(R.id.txtTitle);
             TextView txtAddress = v.findViewById(R.id.txtAddress);
             garageSale sale = (garageSale) marker.getTag();
@@ -300,9 +279,9 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                 //extract the object and array from the response
                 JSONObject myObject = new JSONObject(jsonResponse);
                 JSONArray listOfGarageSales = myObject.getJSONArray("listOfGarageSales");
-                //extract information from each sale object in the array and create a new sale object
+                //extract information from each sale object in the response and create a new sale object
                 for (int i = 0; i < listOfGarageSales.length(); i++) {
-                    // testing  JSONObject firstGarageSale = listOfGarageSales.getJSONObject(0);
+                    //extract the data from JSON object fields
                     JSONObject garageSale = listOfGarageSales.getJSONObject(i);
                     String title = garageSale.getString("title");
                     String date = garageSale.getString("date");
@@ -310,19 +289,19 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                     JSONArray userArray = garageSale.getJSONArray("User");
                     JSONObject userObject = userArray.getJSONObject(0);
                     String username = userObject.getString("username");
-                    Log.d("TAG", username);
+                   // Log.d("TAG", username);
 
                     String startTime = garageSale.getString("startTime");
                     String endTime = garageSale.getString("endTime");
                     String address = garageSale.getString("address");
                     String TUID = garageSale.getString("id");
                     JSONArray JSONitems = garageSale.getJSONArray("items");
-                    //get items from JSON array
+                    //get items from JSON  items array array and store in a string array
                     String[] items = new String[JSONitems.length()];
                     for (int x = 0; x < JSONitems.length(); x++) {
                         items[x] = JSONitems.getString(x);
                     }
-
+                    //format the date data
                     date = date.substring(0, 10);
                     String hours = startTime + " - " + endTime;
 
@@ -330,18 +309,20 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                     garageSale newSale = new garageSale(title, address, username, date, hours, TUID, items);
                     //push new object to array
                     sales.add(newSale);
-                    Log.d("MYTAG", newSale.toString());
-                    Log.d("TEST", address);
+                   // Log.d("MYTAG", newSale.toString());
+                  //  Log.d("TEST", address);
 
 
                     //create a new adapter with all the sales and set the adapter for the list view
                     adapter = new SaleAdapter(this, sales);
                     lstSales.setAdapter(adapter);
 
-                    //call this method to add markers based on retrieved sale locations
-                    addMarkers();
+
+
 
                 }
+                //call this method to add markers based on retrieved sale locations
+                addMarkers();
 
             } catch (JSONException e) {
 
@@ -353,7 +334,6 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         });
         //add the request to the queue
         queue.add(r);
-
 
     }
 
@@ -397,6 +377,7 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
                     //for now move the camera to the area of the sale
                     LatLng area = new LatLng(latitude, longitude);
                     map.moveCamera(CameraUpdateFactory.newLatLng(area));
+                    locationFlag = true;
 
                 }
             catch (Exception ex){
@@ -405,62 +386,33 @@ public class SalesActivity extends AppCompatActivity implements OnMapReadyCallba
         }
 
     }
-
-
-//    public void checkPermissions() {
-//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-//            Log.d(TAG, "Permissions NOT granted, requesting....");
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_REQUEST_CODE);
-//        } else {
-//            Log.d(TAG, "Permissions already granted");
-//        }
-//
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-//        } else {
-//            Log.d(TAG, "Location access permitted...");
-//        }
-//
-//
-//    }
-    /*
-public void getLastLocation() {
-    FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
-    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        Log.d(TAG, "Location access was denied...");
-        return;
-    }
-
-    flpClient.getLastLocation().addOnSuccessListener(location -> {
-        Log.d(TAG, location.toString());
-        Geocoder geocoder = new Geocoder(SalesActivity.this);
-        LatLng area = new LatLng(location.getLatitude(), location.getLongitude());
-        map.moveCamera(CameraUpdateFactory.newLatLng(area));
-        Log.d("Location", area.toString());
-
-    });
-    flpClient.getLastLocation().addOnFailureListener(e -> Log.d(TAG, e.toString()));
-
-}
-
-*/
+    //use this method to get the user's current location to see their sales nearby
     public void getCurrentLocation() {
+        //create a FLP client
         FusedLocationProviderClient flpClient = LocationServices.getFusedLocationProviderClient(this);
-
+        //if permissions are not granted, check the boolean value to move the camera to an active sale rather than current location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Location access was denied...");
             locationFlag = false;
             return;
         }
         flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(location -> {
-            Log.d(TAG, location.toString());
-            Geocoder geocoder = new Geocoder(SalesActivity.this);
-            LatLng area = new LatLng(location.getLatitude(), location.getLongitude());
-            map.moveCamera(CameraUpdateFactory.newLatLng(area));
-            Log.d("Location", area.toString());
+       //if successful return of device location
+            if(location != null) {
+                Log.d(TAG, location.toString());
+                Geocoder geocoder = new Geocoder(SalesActivity.this);
+                LatLng area = new LatLng(location.getLatitude(), location.getLongitude());
+                map.moveCamera(CameraUpdateFactory.newLatLng(area));
+                Log.d("Location", area.toString());
+            }
+        //if location returns null, the device could not retireve location. Flip the flag to move the camera to an active sale.
+            //handles the error
+            else
+                locationFlag = false;
 
         });
 
+        //the FLP client fails and the boolean flag is flipped to handle the error and  move the camera elsewhere
         flpClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {

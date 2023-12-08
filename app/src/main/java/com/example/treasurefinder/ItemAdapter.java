@@ -45,7 +45,9 @@ public class ItemAdapter extends BaseAdapter  {
     @Override
     public View getView(int i, View view, ViewGroup parent) {
         view = LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false);
+        //get the item object that was selected
         Item item = items.get(i);
+        //intiialize views
         TextView txtItemName = view.findViewById(R.id.txtItemName);
         TextView txtPrice = view.findViewById(R.id.txtPrice);
         TextView txtDescription = view.findViewById(R.id.txtDescription);
@@ -58,9 +60,7 @@ public class ItemAdapter extends BaseAdapter  {
         btnRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // send a request method
-                //   /request/new/:id
-                //url to the server
+                //send a post method to the server when someone clicks the request button
                 //url to the server
                 String url = "https://treasurefinderbackend.onrender.com/request/new/"+item.id;
                 //create a new request queue
@@ -98,6 +98,7 @@ public class ItemAdapter extends BaseAdapter  {
         return view;
     }
 
+    //constructor for item in array list
     public ItemAdapter(ArrayList<Item> items, Context context) {
         this.items = items;
         this.context = context;
