@@ -79,7 +79,9 @@ Boolean itemsFlag = true;
         else{
             //split the string into separate array values to get each items ID
             itemInfoData = itemInfoString.split(";");
+
             Log.d("TEST," ,itemInfoString);
+
 
 
             //make the second request to get Item details

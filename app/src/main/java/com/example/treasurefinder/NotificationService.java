@@ -26,7 +26,11 @@ public class NotificationService extends Service {
     private static final String CHANNEL_ID = "Foreground Location Channel";
 
     //Integer for the notificaton ID
-    public static final int NOTIFICATION_ID = 222;
+    public static final int GARAGE_NOTIFICATION_ID = 1;
+
+    public static final int REQUEST_NOTIFICATION_ID = 2;
+
+    public static final int SOLD_NOTIFICATION_ID = 3;
 
     //Debug tag
     public static final String TAG = "NotifServiceTag";
@@ -63,7 +67,7 @@ public class NotificationService extends Service {
         Notification foregroundNotification = createForegroundNotification();
 
         // Start the service in the foreground and show the notification
-        startForeground(NOTIFICATION_ID, foregroundNotification);
+        startForeground(GARAGE_NOTIFICATION_ID, foregroundNotification);
 
         //Creates a "Listener" for the socket
         //(When the client socket recieves the message "newGarageSale" from server it will run function fn)
@@ -77,15 +81,15 @@ public class NotificationService extends Service {
                     .setSmallIcon(android.R.drawable.star_big_on)
                     .setContentTitle("New garage sale near you!")
                     .setContentText("Tap to open App")
-                    .setContentIntent(setOnTapAction())
-                    .setDeleteIntent(setOnDismissAction())
+                    .setContentIntent(setOnGarageTapAction())
+                    .setDeleteIntent(setOnGarageDismissAction())
                     .build();
 
             //Instantiate an instance of notification manager
             NotificationManager manager = getSystemService(NotificationManager.class);
 
             //Send the notification to the phone
-            manager.notify(NOTIFICATION_ID,notification);
+            manager.notify(GARAGE_NOTIFICATION_ID,notification);
         });
 
         //Creates a "Listener" for the socket
@@ -100,19 +104,20 @@ public class NotificationService extends Service {
                     .setSmallIcon(android.R.drawable.star_big_on)
                     .setContentTitle("A User Has Requested Your Item!")
                     .setContentText("Tap to open App")
-                    .setContentIntent(setOnTapAction())
-                    .setDeleteIntent(setOnDismissAction())
+                    .setContentIntent(setOnRequestTapAction())
+                    .setDeleteIntent(setOnRequestDismissAction())
                     .build();
 
             //Instantiate an instance of notification manager
             NotificationManager manager = getSystemService(NotificationManager.class);
 
             //Send the notification to the phone
-            manager.notify(NOTIFICATION_ID,notification);
+            manager.notify(REQUEST_NOTIFICATION_ID,notification);
         });
 
         //Creates a "Listener" for the socket
         //(When the client socket recieves the message "deleteRequest" from server it will run function fn)
+        Log.d(TAG, id);
         mSocket.on("deleteRequest_"+id, fn ->{
 
             //Debug
@@ -123,15 +128,15 @@ public class NotificationService extends Service {
                     .setSmallIcon(android.R.drawable.star_big_on)
                     .setContentTitle("An Item You Requested Has Been Sold!")
                     .setContentText("Tap to open App")
-                    .setContentIntent(setOnTapAction())
-                    .setDeleteIntent(setOnDismissAction())
+                    .setContentIntent(setOnSoldTapAction())
+                    .setDeleteIntent(setOnSoldDismissAction())
                     .build();
 
             //Instantiate an instance of notification manager
             NotificationManager manager = getSystemService(NotificationManager.class);
 
             //Send the notification to the phone
-            manager.notify(NOTIFICATION_ID,notification);
+            manager.notify(SOLD_NOTIFICATION_ID,notification);
         });
         return super.onStartCommand(intent, flags, startId);
     }
@@ -145,7 +150,7 @@ public class NotificationService extends Service {
         mSocket.off("newGarageSale");
     }
 
-    public PendingIntent setOnTapAction(){
+    public PendingIntent setOnGarageTapAction(){
         //Pending intent setOnTapAction used to give the notification the ability to open to the main activity to log in when clicked
 
         //Create intent for the login page (MainActivity)
@@ -154,7 +159,7 @@ public class NotificationService extends Service {
         //Create pending intent for notification to use
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
-                NOTIFICATION_ID,
+                GARAGE_NOTIFICATION_ID,
                 i,
                 PendingIntent.FLAG_IMMUTABLE
         );
@@ -163,7 +168,7 @@ public class NotificationService extends Service {
         return pendingIntent;
     }
 
-    public PendingIntent setOnDismissAction(){
+    public PendingIntent setOnGarageDismissAction(){
         //Pending intent setOnDismissAction used to delete the pending intent
 
         //Create intent with action to delete pending intent
@@ -173,7 +178,81 @@ public class NotificationService extends Service {
         //(This pending intent just stops pending intents)
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this,
-                NOTIFICATION_ID,
+                GARAGE_NOTIFICATION_ID,
+                i,
+                PendingIntent.FLAG_IMMUTABLE
+        );
+
+        //Return the pending intent
+        return pendingIntent;
+    }
+
+    public PendingIntent setOnRequestTapAction(){
+        //Pending intent setOnTapAction used to give the notification the ability to open to the main activity to log in when clicked
+
+        //Create intent for the login page (MainActivity)
+        Intent i = new Intent(this, MainActivity.class);
+
+        //Create pending intent for notification to use
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this,
+                REQUEST_NOTIFICATION_ID,
+                i,
+                PendingIntent.FLAG_IMMUTABLE
+        );
+
+        //Return the pending intent
+        return pendingIntent;
+    }
+
+    public PendingIntent setOnRequestDismissAction(){
+        //Pending intent setOnDismissAction used to delete the pending intent
+
+        //Create intent with action to delete pending intent
+        Intent i = new Intent("dismiss_broadcast");
+
+        //Create pending intent for notification to use
+        //(This pending intent just stops pending intents)
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                REQUEST_NOTIFICATION_ID,
+                i,
+                PendingIntent.FLAG_IMMUTABLE
+        );
+
+        //Return the pending intent
+        return pendingIntent;
+    }
+
+    public PendingIntent setOnSoldTapAction(){
+        //Pending intent setOnTapAction used to give the notification the ability to open to the main activity to log in when clicked
+
+        //Create intent for the login page (MainActivity)
+        Intent i = new Intent(this, MainActivity.class);
+
+        //Create pending intent for notification to use
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this,
+                SOLD_NOTIFICATION_ID,
+                i,
+                PendingIntent.FLAG_IMMUTABLE
+        );
+
+        //Return the pending intent
+        return pendingIntent;
+    }
+
+    public PendingIntent setOnSoldDismissAction(){
+        //Pending intent setOnDismissAction used to delete the pending intent
+
+        //Create intent with action to delete pending intent
+        Intent i = new Intent("dismiss_broadcast");
+
+        //Create pending intent for notification to use
+        //(This pending intent just stops pending intents)
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                SOLD_NOTIFICATION_ID,
                 i,
                 PendingIntent.FLAG_IMMUTABLE
         );
